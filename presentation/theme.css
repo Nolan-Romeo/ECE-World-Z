@@ -1,0 +1,190 @@
+/* @theme labyrinthe */
+
+@import 'default';
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+:root {
+  font-size: 1.8em;
+}
+
+section {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  padding: 40px;
+  background-color: #fff;
+  color: #333;
+}
+
+section.lead {
+  background-color: #216067;
+  color: #ffffff;
+  padding-left: 60px;
+}
+
+section.lead a {
+  color: #ccc;
+  font-size: 0.8em;
+}
+
+section.lead h1 {
+  font-size: 2em;
+  color: #fff;
+}
+
+section.lead header {
+  color: #fff;
+}
+
+section:not(.lead) {
+  justify-content: start;
+}
+
+section::after {
+  content: attr(data-marpit-pagination);
+  right: 40px;
+}
+
+footer {
+  left: 40px;
+}
+
+section::after,
+footer {
+  font-weight: lighter;
+  letter-spacing: 1px;
+  font-size: 0.6em;
+  color: #999;
+  font-weight: normal;
+}
+
+a {
+  color: #249c88;
+}
+
+h1, h2, h3, h4, h6 {
+  margin: 0;
+}
+
+h1 {
+  color: #466969;
+  font-size: 2em;
+}
+
+table,
+tr,
+td,
+th {
+  all: unset;
+  border: solid 1px #eaeaea !important;
+  background: transparent !important;
+  font-size: 1.0em;
+}
+
+table {
+  display: table;
+  width: 100%;
+}
+
+tr {
+  display: table-row;
+}
+
+td,
+th {
+  display: table-cell;
+}
+
+th {
+  color: #216067;
+  font-weight: bolder;
+}
+
+table code {
+  background-color: transparent;
+  font-size: 1.1em;
+}
+
+code {
+  font-family: Consolas, 'Courier New', monospace;
+}
+
+pre {
+  background-color: #f1f1f1;
+  border-radius: 0;
+  border: none;
+  padding: 12px;
+  font-size: 1em;
+}
+
+strong {
+  color: #74a195;
+  font-weight: bolder;
+}
+
+blockquote {
+  border: solid 1px #313335;
+  padding: 20px;
+  padding-top: 40px;
+  background-color: #333;
+  border-radius: 10px;
+  color: #ccc;
+  position: relative;
+  width: 80%;
+  font-size: 0.8em;
+}
+
+blockquote:after {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 15px;
+  background-color: #ff4e4e;
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  border-radius: 50%;
+}
+
+blockquote:before {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 15px;
+  background-color: #fac536;
+  position: absolute;
+  top: 18px;
+  left: 50px;
+  border-radius: 50%;
+}
+
+blockquote p:before {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 15px;
+  background-color: #39ea49;
+  position: absolute;
+  top: 18px;
+  left: 80px;
+  border-radius: 50%;
+}
+
+ul {
+  list-style: none;
+  /* Remove default bullets */
+}
+
+ul li::before {
+  content: "\2022";
+  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  color: #216067;
+  /* Change the color */
+  font-weight: bold;
+  /* If you want it to be bold */
+  display: inline-block;
+  /* Needed to add space between the bullet and the text */
+  width: 1em;
+  /* Also needed for space (tweak if needed) */
+  margin-left: -1em;
+  /* Also needed for space (tweak if needed) */
+}
