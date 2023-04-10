@@ -9,6 +9,22 @@
 #define NB_ETAGE 6
 #define MAX_ASTAR_ITERATIONS 600
 
+#define X_PLATEAU (1600/2)-(60*10/2)
+#define Y_PLATEAU (900/2)-((60*10)/2)
+#define X_PLATEAU_GRID (1600/2)-(55*10/2)
+#define Y_PLATEAU_GRID (900/2)-(55*10/2)
+
+#define ROWS 10
+#define COLS 10
+#define MAX_ITERATIONS 10000
+
+int grid[ROWS][COLS];
+int startRow = 0;
+int startCol = 0;
+int endRow = ROWS - 1;
+int endCol = COLS - 1;
+int maxLength = 30;
+
 typedef struct Maillon{
     int xNext, yNext;
     struct Maillon *next;

@@ -6,13 +6,13 @@ BINDIR = bin
 
 LIBS = -lallegro -lallegro_font -lallegro_primitives -lallegro_image
 
-all: $(BINDIR)/main run
+all: $(BINDIR)/laby run
 
-$(BINDIR)/main: $(SRCDIR)/main.c
+$(BINDIR)/laby: $(SRCDIR)/laby.c
 	@$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 run: 
-	@./$(BINDIR)/main
+	@./$(BINDIR)/laby
 
 clean:
-	del "$(BINDIR)\main.exe"
+	del "$(BINDIR)\laby.exe"
