@@ -1,9 +1,9 @@
 #include "std_iso.h"
 
 void collapsePath(int x, int y, int x1, int y1, Tile map[12][12], Maillon** path){ // fonction récursive pour remonter le chemin à l'envers jusqu'au départ
-	printf("collapse");
+	//printf("collapse");
 
-    LSCAddStart(path, x, y);
+  LSCAddStart(path, x, y);
 
 	if(x == x1 && y == y1) return;
 	switch (map[y][x].direction)
@@ -46,7 +46,7 @@ bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[12][12], 
 			return true;
 		}
     }
-	if(x < 12 && map[y][x+1].type != 3){
+	if(x < 11 && map[y][x+1].type != 3){
         map[y][x+1].open = true;
 		if(map[y][x+1].Gcoast > map[y][x].Gcoast || map[y][x+1].Gcoast == -1){
 			map[y][x+1].Gcoast = map[y][x].Gcoast+1;
@@ -59,7 +59,7 @@ bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[12][12], 
 			return true;
 		}
     }
-    if(x < 12 && map[y+1][x].type != 3){
+    if(y < 11 && map[y+1][x].type != 3){
         map[y+1][x].open = true;
 		if(map[y+1][x].Gcoast > map[y][x].Gcoast || map[y+1][x].Gcoast == -1){
 			map[y+1][x].Gcoast = map[y][x].Gcoast+1;

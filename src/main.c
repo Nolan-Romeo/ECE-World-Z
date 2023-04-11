@@ -127,11 +127,11 @@ int main(int argc, char* argv[])
             xSel = (((abs(ySelIso)+abs(xSelIso)) >= 0) && ((abs(ySelIso)+abs(xSelIso)) <= PLAT_SIZE*2) && (ySelIso+xSelIso)/2 >= 0 && (ySelIso-xSelIso)/2 >= 0 && tab[0][(ySelIso-xSelIso)/2][(ySelIso+xSelIso)/2].type != 0 && tab[1][(ySelIso-xSelIso)/2][(ySelIso+xSelIso)/2].type == 0)? (ySelIso+xSelIso)/2: xSel;
             ySel = (((abs(ySelIso)+abs(xSelIso)) >= 0) && ((abs(ySelIso)+abs(xSelIso)) <= PLAT_SIZE*2) && (ySelIso-xSelIso)/2 >= 0 && (ySelIso+xSelIso)/2 >= 0 && tab[0][(ySelIso-xSelIso)/2][(ySelIso+xSelIso)/2].type != 0 && tab[1][(ySelIso-xSelIso)/2][(ySelIso+xSelIso)/2].type == 0)? (ySelIso-xSelIso)/2: ySel;
 
-            printf("%d, %d \n", xSel, ySel);
+            //printf("%d, %d \n", xSel, ySel);
 
             if ((playerX != xSel || playerY != ySel) && path == NULL){
                 if(!findPath(playerX, playerY, xSel, ySel, tab, &path)){
-                    printf("Erreur chemin impossible\n");
+                    //printf("Erreur chemin impossible\n");
                 }
             } else if(path != NULL){
                 playerX = path->xNext;
