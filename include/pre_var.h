@@ -41,4 +41,9 @@ typedef struct{
     int Fcoast, Hcoast;
 }TileToExpand;
 
+typedef struct{
+    int x,y;
+}Coord;
+
+
 #endif
