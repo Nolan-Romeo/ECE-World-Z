@@ -72,11 +72,15 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(123, 125, 125));
 
-            for(int x=0 ; x<10 ; x++){
-                for (int y=0 ; y<10 ; y++){
-                    al_draw_filled_rectangle(X_PLATEAU+60*x,Y_PLATEAU+60*y,X_PLATEAU+60*x+60,Y_PLATEAU+60*y+60,al_map_rgb(0+5*grid[x][y], 0, 0));
+                for(int x=0 ; x<ROWS ; x++){
+                    for (int y=0 ; y<COLS ; y++){
+                        al_draw_filled_rectangle(X_PLATEAU+60*x,Y_PLATEAU+60*y,X_PLATEAU+60*x+60,Y_PLATEAU+60*y+60,al_map_rgb(0, 0, 0+5*grid[x][y]));
+                        al_draw_filled_rectangle(X_PLATEAU+60*(22-x),Y_PLATEAU+60*y,X_PLATEAU+60*x+60,Y_PLATEAU+60*y+60,al_map_rgb(0+5*grid[x][y], 0, 0));
+                    }
                 }
-            }
+
+            al_draw_rectangle(1600/2,0,1600/2,900,al_map_rgb(0,255,0),1);
+            al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
 
             al_flip_display();
 

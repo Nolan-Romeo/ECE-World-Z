@@ -9,13 +9,11 @@
 #define NB_ETAGE 6
 #define MAX_ASTAR_ITERATIONS 600
 
-#define X_PLATEAU (1600/2)-(60*10/2)
-#define Y_PLATEAU (900/2)-((60*10)/2)
-#define X_PLATEAU_GRID (1600/2)-(55*10/2)
-#define Y_PLATEAU_GRID (900/2)-(55*10/2)
+#define X_PLATEAU (1600/2)-(60*22/2)
+#define Y_PLATEAU (900/2)-((60*11)/2)
 
-#define ROWS 10
-#define COLS 10
+#define ROWS 11
+#define COLS 11
 #define MAX_ITERATIONS 10000
 
 int grid[ROWS][COLS];
