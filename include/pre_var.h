@@ -14,7 +14,7 @@
 
 #define ROWS 11
 #define COLS 11
-#define MAX_ITERATIONS 10000
+#define MAX_ITERATIONS 1000
 
 int grid[ROWS][COLS];
 int startRow = 0;

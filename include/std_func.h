@@ -62,73 +62,111 @@ void LSCRemoveStart(Maillon** maillon){
     }
 }
 
-bool inGrid(int row, int col) {
-    return row >= 0 && row < ROWS && col >= 0 && col < COLS;
-}
-
-bool isVisited(int row, int col) {
-    return grid[row][col] != 0;
-}
-
-bool isEnd(int row, int col) {
-    return row == endRow && col == endCol;
-}
-
-bool isMaxLength(int length) {
-    return length == maxLength;
-}
-
-int getRandomDirection() {
-    return rand() % 4; // 0 = haut, 1 = bas, 2 = gauche, 3 = droite
-}
-
-void move(int *row, int *col, int direction) {
-    switch (direction) {
-        case 0: // haut
-            (*row)--;
-            break;
-        case 1: // bas
-            (*row)++;
-            break;
-        case 2: // gauche
-            (*col)--;
-            break;
-        case 3: // droite
-            (*col)++;
-            break;
-    }
-}
-
-bool findrandomPath() {
-    int currentRow = startRow;
-    int currentCol = startCol;
-    int currentLength = 1;
-    grid[currentRow][currentCol] = currentLength;
-    int iterations = 0;
-    while (!isEnd(currentRow, currentCol) && !isMaxLength(currentLength) && iterations < MAX_ITERATIONS) {
-        int direction = getRandomDirection();
-        int newRow = currentRow;
-        int newCol = currentCol;
-        move(&newRow, &newCol, direction);
-        if (inGrid(newRow, newCol) && !isVisited(newRow, newCol)) {
-            currentLength++;
-            grid[newRow][newCol] = currentLength;
-            currentRow = newRow;
-            currentCol = newCol;
+void afficherMaze(){
+    for(int x=0 ; x<ROWS ; x++){
+        for (int y=0 ; y<COLS ; y++){
+            ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
+            al_draw_filled_rectangle(X_PLATEAU+60*x+10,Y_PLATEAU+60*y+10,X_PLATEAU+60*x+50,Y_PLATEAU+60*y+50,color);
+            color = (grid[x][y] == 0)? al_map_rgb(0, 0, 0): (grid[x][y] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
+            al_draw_filled_rectangle(X_PLATEAU+60*(22-x)-10,Y_PLATEAU+60*y+10,X_PLATEAU+60*(22-x)-50,Y_PLATEAU+60*y+50,color);
         }
-        iterations++;
     }
-    return isEnd(currentRow, currentCol);
+
+    Coord current_red = {X_PLATEAU+60*22-10 , Y_PLATEAU+10};
+    Coord current_blue = {X_PLATEAU+10 , Y_PLATEAU+10};
+
+    for(int y = 0; y < 11; y++){
+        for(int x = 0; x < 11; x++){
+            current_blue.x = x*60 + X_PLATEAU+10;
+            current_blue.y = y*60 + Y_PLATEAU+10;
+            current_red.x = X_PLATEAU+60*22-10 - y*60;
+            current_red.y = x*60 + Y_PLATEAU+10;
+            ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
+            if( y!=0 && (grid[y][x] == 1 || grid[y][x] == 5)){ // EN HAUT
+                al_draw_filled_rectangle(current_blue.x, current_blue.y-20, current_blue.x+40 , current_blue.y,color);
+                al_draw_filled_rectangle(current_red.x+20, current_red.y, current_red.x , current_red.y+40,color);
+            }
+            else if(x!=0 && (grid[y][x] == 4 || grid[y][x] == 8)){ // A GAUCHE
+                al_draw_filled_rectangle(current_blue.x-20, current_blue.y, current_blue.x , current_blue.y+40,color);
+                al_draw_filled_rectangle(current_red.x, current_red.y-20, current_red.x-40 , current_red.y,color);
+            }
+            else if(y!=10 && (grid[y][x] == 3 || grid[y][x] == 7)){ // EN BAS
+                al_draw_filled_rectangle(current_blue.x, current_blue.y+40, current_blue.x+40 , current_blue.y+60,color);
+                al_draw_filled_rectangle(current_red.x-40, current_red.y, current_red.x-60 , current_red.y+40,color);
+            }
+            else if(x!=10 && (grid[y][x] == 2 || grid[y][x] == 6)){ // A DROITE
+                al_draw_filled_rectangle(current_blue.x+40, current_blue.y, current_blue.x+60 , current_blue.y+40,color);
+                al_draw_filled_rectangle(current_red.x, current_red.y+40, current_red.x-40 , current_red.y+60,color);
+            }
+        }
+    }
+    al_flip_display();
 }
 
-void printGrid() {
+int choose_dir(int x, int y){
+    int directions[4] = {0};
+    int nbDir = 0;
+    if( y!=0 && grid[y-1][x] == 0 ){ // EN HAUT
+        directions[nbDir] = 1;
+        nbDir += 1;
+    }if(x!=0 && grid[y][x-1] == 0){ // A GAUCHE
+        directions[nbDir] = 4;
+        nbDir += 1;
+    }if(y!=10 && grid[y+1][x] == 0){ // EN BAS
+        directions[nbDir] = 3;
+        nbDir += 1;
+    }if(x!=10 && grid[y][x+1] == 0){ // A DROITE
+        directions[nbDir] = 2;
+        nbDir += 1;
+    }
+
+    if(nbDir == 0) return 0;
+    return directions[getRandomInt(0, nbDir-1)];
+}
+
+void expand(int x, int y){
+    int dir = choose_dir(x, y);
+        switch (dir){
+        case  0:
+            grid[y][x] = (grid[y][x] == 0)? 9: grid[y][x]+4;
+            return;
+        case 1:
+            grid[y][x] = 1;
+            afficherMaze();
+            al_rest(0.03);
+            expand(x, y-1);
+            break;
+        case 2:
+            grid[y][x] = 2;
+            afficherMaze();
+            al_rest(0.03);
+            expand(x+1, y);
+            break;
+        case 3:
+            grid[y][x] = 3;
+            afficherMaze();
+            al_rest(0.03);
+            expand(x, y+1);
+            break;
+        case 4:
+            grid[y][x] = 4;
+            afficherMaze();
+            al_rest(0.03);
+            expand(x-1, y);
+            break;
+        }
+        expand(x, y);
+        
+}
+
+void generate_maze(){
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            printf("%d ", grid[i][j]);
+            grid[i][j] = 0;
         }
-        printf("\n");
     }
-    printf("\n");
+    expand(0,0);
+    afficherMaze();
 }
 
 #endif
