@@ -1,13 +1,14 @@
 #ifndef pre_var_
 #define pre_var_
 
-#define CASE_SIZE 6
+#define CASE_SIZE 24
 #define PLAT_SIZE 128
 #define TUILE_SIZE_X 16
 #define TUILE_SIZE_Y 18
 #define TUILE_RESIZE 2
 #define NB_ETAGE 6
 #define MAX_ASTAR_ITERATIONS 600
+#define VIEW_DISTANCE 32
 
 typedef struct Maillon{
     int xNext, yNext;

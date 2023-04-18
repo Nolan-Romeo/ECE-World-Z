@@ -64,17 +64,13 @@ int main(int argc, char* argv[])
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_O)){
                 resetMap(tab, "./map");
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_Z)){
-                displacement_Y -= 100;
-                displacement_flat_Y -= 16;
+                displacement_flat_Y = (displacement_flat_Y > 0)? displacement_flat_Y-VIEW_DISTANCE/2: displacement_flat_Y;
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_Q)){
-                displacement_X -= 100;
-                displacement_flat_X -= 16;
+                displacement_flat_X = (displacement_flat_X > 0)? displacement_flat_X-VIEW_DISTANCE/2: displacement_flat_X;
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_S)){
-                displacement_Y += 100;
-                displacement_flat_Y += 16;
+                displacement_flat_Y = (displacement_flat_Y < PLAT_SIZE-VIEW_DISTANCE)? displacement_flat_Y+VIEW_DISTANCE/2: displacement_flat_Y;
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_D)){
-                displacement_X += 100;
-                displacement_flat_X += 16;
+                displacement_flat_X = (displacement_flat_X < PLAT_SIZE-VIEW_DISTANCE)? displacement_flat_X+VIEW_DISTANCE/2: displacement_flat_X;
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_PAD_PLUS)){
                 brush = (brush < 90)? brush+1: brush;
             }else if(al_key_down(&keyboard_state, ALLEGRO_KEY_MINUS) || al_key_down(&keyboard_state, ALLEGRO_KEY_PAD_MINUS)){
@@ -101,10 +97,10 @@ int main(int argc, char* argv[])
 
             srand(0);
 
-            al_draw_rectangle(2, 2, 16*CASE_SIZE+2, 16*CASE_SIZE+2, al_map_rgb(255,255,255), 2);
-            al_draw_textf(font, al_map_rgb(255,255,255), 16*CASE_SIZE+10, 10, 0, "etage %d", etage);
-            al_draw_textf(font, al_map_rgb(255,255,255), 16*CASE_SIZE+10, 20, 0, "brush %d", brush);
-            al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(((brush-1)%9)*TUILE_SIZE_X), 0+(((brush-1)/9)*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, PLAT_SIZE*CASE_SIZE+10, 30, 3, 3, 0, 0);
+            al_draw_rectangle(2, 2, VIEW_DISTANCE*CASE_SIZE+2, VIEW_DISTANCE*CASE_SIZE+2, al_map_rgb(255,255,255), 2);
+            al_draw_textf(font, al_map_rgb(255,255,255), VIEW_DISTANCE*CASE_SIZE+10, 10, 0, "etage %d", etage);
+            al_draw_textf(font, al_map_rgb(255,255,255), VIEW_DISTANCE*CASE_SIZE+10, 20, 0, "brush %d", brush);
+            al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(((brush-1)%9)*TUILE_SIZE_X), 0+(((brush-1)/9)*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, VIEW_DISTANCE*CASE_SIZE+10, 30, 3, 3, 0, 0);
 
             int xOffset = 0;
             int yOffset = 0;
@@ -159,13 +155,13 @@ int main(int argc, char* argv[])
             //printf("%d %d \n", xSel, ySel);
 
             for(int z = 0; z < NB_ETAGE; z++){
-                for(int x = displacement_flat_X; x < displacement_flat_X+16; x++){
-                    for(int y = displacement_flat_Y; y < displacement_flat_Y+16; y++){
+                for(int x = displacement_flat_X; x < displacement_flat_X+VIEW_DISTANCE; x++){
+                    for(int y = displacement_flat_Y; y < displacement_flat_Y+VIEW_DISTANCE; y++){
                         if(tab[z][y][x].type != 0) {
                             int typeTuileX = (tab[z][y][x].type-1) % 9;
                             int typeTuileY = (tab[z][y][x].type-1) / 9;
                             if(z == etage) al_draw_rectangle((x-displacement_flat_X)*CASE_SIZE+2, (y-displacement_flat_Y)*CASE_SIZE+2, (x-displacement_flat_X)*CASE_SIZE+CASE_SIZE+2, (y-displacement_flat_Y)*CASE_SIZE+CASE_SIZE+2, al_get_pixel(map, typeTuileX*TUILE_SIZE_X+TUILE_SIZE_X/2, typeTuileY*TUILE_SIZE_Y+4), 2);
-                            al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(typeTuileX*TUILE_SIZE_X), 0+(typeTuileY*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, (((x-z)*(TUILE_SIZE_X))-((y-z)*(TUILE_SIZE_X))-2)*TUILE_RESIZE/2+displacement_X, 0+(((y-z)*8)+((x-z)*8)-(4*z))*TUILE_RESIZE/2 + displacement_Y, TUILE_RESIZE, TUILE_RESIZE, 0, 0);
+                            al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(typeTuileX*TUILE_SIZE_X), 0+(typeTuileY*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, (((x-displacement_flat_X-z)*(TUILE_SIZE_X))-((y-displacement_flat_Y-z)*(TUILE_SIZE_X))-2)*TUILE_RESIZE/2 + displacement_X, 0+(((y-displacement_flat_Y-z)*8)+((x-displacement_flat_X-z)*8)-(4*z))*TUILE_RESIZE/2 + displacement_Y, TUILE_RESIZE, TUILE_RESIZE, 0, 0);
                         }
                         if(playerX >= 0 && playerY >= 0 && tab[0][ySel][xSel].type != 0 && tab[1][ySel][xSel].type == 0 && z == 0) al_draw_tinted_scaled_rotated_bitmap_region(map, 144, TUILE_SIZE_Y, TUILE_SIZE_X, 9, al_map_rgb(255,255,255), 0, 0, ((playerX*(TUILE_SIZE_X))-(playerY*(TUILE_SIZE_X))-2+416)*TUILE_RESIZE/2, 0+((playerY*8)+(playerX*8)+128)*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0); // affiche la tuile séléctionnée
                     }
