@@ -12,8 +12,11 @@
 #define X_PLATEAU (1600/2)-(60*22/2)
 #define Y_PLATEAU (900/2)-((60*11)/2)
 
-#define ROWS 11
-#define COLS 11
+#define LABY_CASE_SIZE 3
+#define LABY_WALL_SIZE 1
+
+#define ROWS 220
+#define COLS 220
 #define MAX_ITERATIONS 1000
 
 int grid[ROWS][COLS];
@@ -44,6 +47,10 @@ typedef struct{
 typedef struct{
     int x,y;
 }Coord;
+
+typedef struct{
+    int x,y;
+}Player;
 
 
 #endif

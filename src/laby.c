@@ -19,6 +19,8 @@ int main(int argc, char* argv[]){
 
     bool redraw = true;
 
+    Player player1 = {0,0};
+
     generate_maze();
 
     while (1){
@@ -54,8 +56,12 @@ int main(int argc, char* argv[]){
 
         if(redraw && al_is_event_queue_empty(queue)){
 
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+
             //al_draw_rectangle(1600/2,0,1600/2,900,al_map_rgb(0,255,0),1);
             //al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
+
+            afficherMaze();
 
             al_flip_display();
 
