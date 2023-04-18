@@ -1,6 +1,6 @@
 #include "std_iso.h"
 
-void collapsePath(int x, int y, int x1, int y1, Tile map[12][12], Maillon** path){ // fonction récursive pour remonter le chemin à l'envers jusqu'au départ
+void collapsePath(int x, int y, int x1, int y1, Tile map[PLAT_SIZE][PLAT_SIZE], Maillon** path){ // fonction récursive pour remonter le chemin à l'envers jusqu'au départ
 	//printf("collapse");
 
   LSCAddStart(path, x, y);
@@ -32,7 +32,7 @@ void collapsePath(int x, int y, int x1, int y1, Tile map[12][12], Maillon** path
 	collapsePath(x, y, x1, y1, map, path);
 }
 
-bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[12][12], Maillon** path){
+bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[PLAT_SIZE][PLAT_SIZE], Maillon** path){
 	if(y > 0 && map[y-1][x].type != 3){
         map[y-1][x].open = true;
 		if(map[y-1][x].Gcoast > map[y][x].Gcoast || map[y-1][x].Gcoast == -1){
@@ -46,7 +46,7 @@ bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[12][12], 
 			return true;
 		}
     }
-	if(x < 11 && map[y][x+1].type != 3){
+	if(x < PLAT_SIZE-1 && map[y][x+1].type != 3){
         map[y][x+1].open = true;
 		if(map[y][x+1].Gcoast > map[y][x].Gcoast || map[y][x+1].Gcoast == -1){
 			map[y][x+1].Gcoast = map[y][x].Gcoast+1;
@@ -59,7 +59,7 @@ bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[12][12], 
 			return true;
 		}
     }
-    if(y < 11 && map[y+1][x].type != 3){
+    if(y < PLAT_SIZE-1 && map[y+1][x].type != 3){
         map[y+1][x].open = true;
 		if(map[y+1][x].Gcoast > map[y][x].Gcoast || map[y+1][x].Gcoast == -1){
 			map[y+1][x].Gcoast = map[y][x].Gcoast+1;
@@ -92,7 +92,7 @@ bool expandTile(int x, int y, int x1, int y1, int x2, int y2, Tile map[12][12], 
 
 bool findPath(int x1, int y1, int x2, int y2, Tile map[NB_ETAGE][PLAT_SIZE][PLAT_SIZE], Maillon** path){
 
-	if(x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 >= 12 || y1 >= 12 || x2 >= 12 || y2 >= 12) return false;
+	if(x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 >= PLAT_SIZE || y1 >= PLAT_SIZE || x2 >= PLAT_SIZE || y2 >= PLAT_SIZE) return false;
 
 	printf("findPath");
 
@@ -125,8 +125,8 @@ bool findPath(int x1, int y1, int x2, int y2, Tile map[NB_ETAGE][PLAT_SIZE][PLAT
 		tileToExpand.Hcoast = 1000;
         tileToExpand.x = -1;
         tileToExpand.y = -1;
-        for(int y = 0; y < 12; y++){
-            for(int x = 0; x < 12; x++){
+        for(int y = 0; y < PLAT_SIZE; y++){
+            for(int x = 0; x < PLAT_SIZE; x++){
                 if(map2D[y][x].open){
                     if((((map2D[y][x].Fcoast != -1) && (map2D[y][x].Fcoast < tileToExpand.Fcoast)) || ((map2D[y][x].Fcoast == tileToExpand.Fcoast) && (map2D[y][x].Hcoast < tileToExpand.Hcoast))) && (map2D[y][x].treated == false)){
                         tileToExpand.Fcoast = map2D[y][x].Fcoast;

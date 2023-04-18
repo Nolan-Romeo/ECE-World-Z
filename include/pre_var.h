@@ -1,8 +1,8 @@
 #ifndef pre_var_
 #define pre_var_
 
-#define CASE_SIZE 24
-#define PLAT_SIZE 12
+#define CASE_SIZE 6
+#define PLAT_SIZE 128
 #define TUILE_SIZE_X 16
 #define TUILE_SIZE_Y 18
 #define TUILE_RESIZE 2
