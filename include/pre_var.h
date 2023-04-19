@@ -9,8 +9,8 @@
 #define NB_ETAGE 6
 #define MAX_ASTAR_ITERATIONS 600
 
-#define X_PLATEAU (1600/2)-(60*22/2)
-#define Y_PLATEAU (900/2)-((60*11)/2)
+#define X_PLATEAU (1920/2)-(60*22/2)
+#define Y_PLATEAU (1080/2)-((60*11+100)/2)
 
 #define ROWS 11
 #define COLS 11

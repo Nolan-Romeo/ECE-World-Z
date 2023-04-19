@@ -71,6 +71,9 @@ void afficherMaze(){
             al_draw_filled_rectangle(X_PLATEAU+60*(22-x)-10,Y_PLATEAU+60*y+10,X_PLATEAU+60*(22-x)-50,Y_PLATEAU+60*y+50,color);
         }
     }
+    al_draw_filled_rectangle(910, 810, 1010, 880, al_map_rgb(255, 255, 255));
+    al_draw_filled_rectangle(910, 880, 1010, 910, al_map_rgb(255, 0, 0));
+    al_draw_filled_rectangle(950, 810, 970, 830, al_map_rgb(0, 0, 0));
 
     Coord current_red = {X_PLATEAU+60*22-10 , Y_PLATEAU+10};
     Coord current_blue = {X_PLATEAU+10 , Y_PLATEAU+10};
@@ -102,6 +105,7 @@ void afficherMaze(){
     }
     al_flip_display();
 }
+
 
 int choose_dir(int x, int y){
     int directions[4] = {0};
