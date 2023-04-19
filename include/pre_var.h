@@ -1,6 +1,9 @@
 #ifndef pre_var_
 #define pre_var_
 
+#define WIDTH 1920
+#define HEIGHT 1080
+
 #define CASE_SIZE 24
 #define PLAT_SIZE 12
 #define TUILE_SIZE_X 16
@@ -9,8 +12,8 @@
 #define NB_ETAGE 6
 #define MAX_ASTAR_ITERATIONS 600
 
-#define X_PLATEAU (1600/2)-(60*22/2)
-#define Y_PLATEAU (900/2)-((60*11)/2)
+#define X_PLATEAU (WIDTH/2)-(LABY_CASE_SIZE*2*ROWS/2)
+#define Y_PLATEAU (HEIGHT/2)-((LABY_CASE_SIZE*ROWS)/2)
 
 #define LABY_CASE_SIZE 60
 #define LABY_WALL_SIZE 12

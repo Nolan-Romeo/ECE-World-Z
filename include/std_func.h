@@ -131,6 +131,7 @@ void afficherMaze(ALLEGRO_BITMAP* laby_texture){
     al_flip_display();
 }
 
+
 int choose_dir(int x, int y){
     int directions[4] = {0};
     int nbDir = 0;
