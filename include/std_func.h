@@ -68,7 +68,6 @@ void afficherMaze(ALLEGRO_BITMAP* laby_texture){
             ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
             //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_CASE_SIZE-LABY_WALL_SIZE,color);
             al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 0, 60, 72, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*x+LABY_WALL_SIZE, Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE, 1, 1, 0, 0);
-            color = (grid[x][y] == 0)? al_map_rgb(0, 0, 0): (grid[x][y] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
             al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*(ROWS*2-x)-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*(ROWS*2-x)-LABY_CASE_SIZE+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_CASE_SIZE-LABY_WALL_SIZE,color);
         }
     }
@@ -108,7 +107,6 @@ void afficherMaze(ALLEGRO_BITMAP* laby_texture){
             current_blue.y = y*LABY_CASE_SIZE + Y_PLATEAU+LABY_WALL_SIZE;
             current_red.x = X_PLATEAU+LABY_CASE_SIZE*ROWS*2-LABY_WALL_SIZE - y*LABY_CASE_SIZE;
             current_red.y = x*LABY_CASE_SIZE + Y_PLATEAU+LABY_WALL_SIZE;
-            ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
             if(((grid[y][x] == 8) && (y!=0 && grid[y-1][x] == 7)) || ((x!=0 && grid[y][x-1] == 6) && (grid[y][x] == 5)) || ((x!=0 && grid[y][x-1] == 6) && (y!=0 && grid[y-1][x] == 7))){ // A GAUCHE ET EN HAUT
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 84, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_blue.x, current_blue.y-LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
             }
@@ -123,8 +121,6 @@ void afficherMaze(ALLEGRO_BITMAP* laby_texture){
             }
         }
     }
-
-    al_flip_display();
 }
 
 
@@ -193,6 +189,31 @@ void generate_maze(ALLEGRO_BITMAP* laby_texture){
     grid[0][0] = 9;
     expand(0,0);
     afficherMaze(laby_texture);
+}
+
+void movePlayer(Player* player, int direction){
+    switch (direction){
+    case 1:
+        if(player->y != 0 && (grid[player->y][player->x] == 5 || grid[player->y-1][player->x] == 7)){
+            player->y -= 1;
+        }       
+        break;
+    case 2:
+        if(player->x != COLS-1 && (grid[player->y][player->x] == 6 || grid[player->y][player->x+1] == 8)){
+            player->x += 1;
+        }  
+        break;
+    case 3:
+        if(player->y != ROWS-1 && (grid[player->y][player->x] == 7 || grid[player->y+1][player->x] == 5)){
+            player->y += 1;
+        }
+        break;
+    case 4:
+        if(player->x != 0 && (grid[player->y][player->x] == 8 || grid[player->y][player->x-1] == 6)){
+            player->x -= 1;
+        } 
+        break;
+    }
 }
 
 #endif

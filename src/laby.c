@@ -18,6 +18,8 @@ int main(int argc, char* argv[]){
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
+    al_start_timer(timer);
+
     ALLEGRO_BITMAP* laby_texture = load_image("img/Labyrinthe.bmp");
 
     bool redraw = true;
@@ -34,12 +36,12 @@ int main(int argc, char* argv[]){
         switch (event.type){
             case ALLEGRO_EVENT_TIMER:
                 redraw = true;
-
+                break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 al_destroy_display(disp);
                 al_destroy_event_queue(queue);
                 return 0;
-
+                break;
             case ALLEGRO_EVENT_KEY_DOWN:
             
                 switch (event.keyboard.keycode){
@@ -47,7 +49,22 @@ int main(int argc, char* argv[]){
                         al_destroy_display(disp);
                         al_destroy_event_queue(queue);
                         return 0;
-
+                    case ALLEGRO_KEY_Z:
+                        movePlayer(&player1, 1);
+                        printf(" Player %d:%d \n", player1.x, player1.y);
+                        break;
+                    case ALLEGRO_KEY_Q:
+                        movePlayer(&player1, 4);
+                        printf(" Player %d:%d \n", player1.x, player1.y);
+                        break;
+                    case ALLEGRO_KEY_S:
+                        movePlayer(&player1, 3);
+                        printf(" Player %d:%d \n", player1.x, player1.y);
+                        break;
+                    case ALLEGRO_KEY_D:
+                        movePlayer(&player1, 2);
+                        printf(" Player %d:%d \n", player1.x, player1.y);
+                        break;
                     default:
                         break;
                 } 
@@ -65,6 +82,8 @@ int main(int argc, char* argv[]){
             //al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
 
             afficherMaze(laby_texture);
+
+            al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
 
             al_flip_display();
 
