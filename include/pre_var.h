@@ -1,6 +1,9 @@
 #ifndef pre_var_
 #define pre_var_
 
+#define WIDTH 1920
+#define HEIGHT 1080
+
 #define CASE_SIZE 24
 #define PLAT_SIZE 12
 #define TUILE_SIZE_X 16
@@ -9,11 +12,14 @@
 #define NB_ETAGE 6
 #define MAX_ASTAR_ITERATIONS 600
 
-#define X_PLATEAU (1920/2)-(60*22/2)
-#define Y_PLATEAU (1080/2)-((60*11+100)/2)
+#define X_PLATEAU (WIDTH/2)-(LABY_CASE_SIZE*2*ROWS/2)
+#define Y_PLATEAU (HEIGHT/2)-((LABY_CASE_SIZE*ROWS)/2)
 
-#define ROWS 11
-#define COLS 11
+#define LABY_CASE_SIZE 6
+#define LABY_WALL_SIZE 1  
+
+#define ROWS 110
+#define COLS 110
 #define MAX_ITERATIONS 1000
 
 int grid[ROWS][COLS];
@@ -44,6 +50,10 @@ typedef struct{
 typedef struct{
     int x,y;
 }Coord;
+
+typedef struct{
+    int x,y;
+}Player;
 
 
 #endif

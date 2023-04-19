@@ -10,7 +10,7 @@ int main(int argc, char* argv[]){
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    ALLEGRO_DISPLAY* disp = al_create_display(1920, 1080);
+    ALLEGRO_DISPLAY* disp = al_create_display(WIDTH, HEIGHT);
 
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
@@ -18,6 +18,8 @@ int main(int argc, char* argv[]){
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
     bool redraw = true;
+
+    Player player1 = {0,0};
 
     generate_maze();
 
@@ -54,8 +56,12 @@ int main(int argc, char* argv[]){
 
         if(redraw && al_is_event_queue_empty(queue)){
 
+            al_clear_to_color(al_map_rgb(0, 0, 0));
+
             //al_draw_rectangle(1600/2,0,1600/2,900,al_map_rgb(0,255,0),1);
             //al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
+
+            afficherMaze();
 
             al_flip_display();
 
