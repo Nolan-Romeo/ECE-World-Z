@@ -7,6 +7,7 @@ int main(int argc, char* argv[]){
     al_install_keyboard();
     al_install_mouse();
     al_init_primitives_addon();
+    al_init_image_addon();
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
@@ -17,11 +18,13 @@ int main(int argc, char* argv[]){
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
+    ALLEGRO_BITMAP* laby_texture = load_image("img/Labyrinthe.bmp");
+
     bool redraw = true;
 
     Player player1 = {0,0};
 
-    generate_maze();
+    generate_maze(laby_texture);
 
     while (1){
 
@@ -61,7 +64,7 @@ int main(int argc, char* argv[]){
             //al_draw_rectangle(1600/2,0,1600/2,900,al_map_rgb(0,255,0),1);
             //al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
 
-            afficherMaze();
+            afficherMaze(laby_texture);
 
             al_flip_display();
 
