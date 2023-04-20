@@ -184,9 +184,12 @@ int main(int argc, char* argv[]){
 
             for(int i = 0; i < 5; i++){
                 if(player1.x == lilypad[i].x && player1.y == lilypad[i].y && lilypad[i].used == false){
-                    al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(0,255,0));
                     control_change += 1;
                     lilypad[i].used = true;
+                    keystate[0] = false;
+                    keystate[1] = false;
+                    keystate[2] = false;
+                    keystate[3] = false;
                 }
             }
 
