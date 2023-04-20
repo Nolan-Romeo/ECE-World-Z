@@ -65,10 +65,8 @@ void LSCRemoveStart(Maillon** maillon){
 void afficherMaze(ALLEGRO_BITMAP* laby_texture){
     for(int x=0 ; x<ROWS ; x++){
         for (int y=0 ; y<COLS ; y++){
-            ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
-            //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_CASE_SIZE-LABY_WALL_SIZE,color);
             al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 0, 60, 72, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*x+LABY_WALL_SIZE, Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE, 1, 1, 0, 0);
-            al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*(ROWS*2-x)-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*(ROWS*2-x)-LABY_CASE_SIZE+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*y+LABY_CASE_SIZE-LABY_WALL_SIZE,color);
+            al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 0, 60, 72, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*(22-x)-LABY_WALL_SIZE, Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE, 1, 1, 0, 0);
         }
     }
 
@@ -81,23 +79,22 @@ void afficherMaze(ALLEGRO_BITMAP* laby_texture){
             current_blue.y = y*LABY_CASE_SIZE + Y_PLATEAU+LABY_WALL_SIZE;
             current_red.x = X_PLATEAU+LABY_CASE_SIZE*ROWS*2-LABY_WALL_SIZE - y*LABY_CASE_SIZE;
             current_red.y = x*LABY_CASE_SIZE + Y_PLATEAU+LABY_WALL_SIZE;
-            ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 0): al_map_rgb(0, 0, 255);
             if(x!=0 && (grid[y][x] == 4 || grid[y][x] == 8)){ // A GAUCHE
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 60, 0, 24, 72, al_map_rgb(255,255,255), 0, 0, current_blue.x-LABY_WALL_SIZE, current_blue.y, 1, 1, 0, 0);
-                al_draw_filled_rectangle(current_red.x, current_red.y-2*LABY_WALL_SIZE, current_red.x-LABY_CASE_SIZE+2*LABY_WALL_SIZE , current_red.y,color);
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 72, 60, 48, al_map_rgb(255,255,255), 0, 0, current_red.x, current_red.y-LABY_WALL_SIZE*2, 1, 1, 0, 0);
             }
             else if(x!=COLS-1 && (grid[y][x] == 2 || grid[y][x] == 6)){ // A DROITE
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 60, 0, 24, 72, al_map_rgb(255,255,255), 0, 0, current_blue.x+LABY_CASE_SIZE-LABY_WALL_SIZE, current_blue.y, 1, 1, 0, 0);
-                al_draw_filled_rectangle(current_red.x, current_red.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, current_red.x-LABY_CASE_SIZE+2*LABY_WALL_SIZE , current_red.y+LABY_CASE_SIZE,color);
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 72, 60, 48, al_map_rgb(255,255,255), 0, 0, current_red.x, current_red.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, 1, 1, 0, 0); 
             }
             else if(y!=0 && (grid[y][x] == 1 || grid[y][x] == 5)){ // EN HAUT
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 72, 60, 48, al_map_rgb(255,255,255), 0, 0, current_blue.x, current_blue.y-LABY_WALL_SIZE*2, 1, 1, 0, 0);
-                al_draw_filled_rectangle(current_red.x+2*LABY_WALL_SIZE, current_red.y, current_red.x , current_red.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE,color);
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 60, 0, 24, 72, al_map_rgb(255,255,255), 0, 0, current_red.x+LABY_CASE_SIZE-LABY_WALL_SIZE, current_red.y, 1, 1, 0, 0);
             }
             else if(y!=ROWS-1 && (grid[y][x] == 3 || grid[y][x] == 7)){ // EN BAS
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 72, 60, 48, al_map_rgb(255,255,255), 0, 0, current_blue.x, current_blue.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, 1, 1, 0, 0); 
-                al_draw_filled_rectangle(current_red.x-LABY_CASE_SIZE+2*LABY_WALL_SIZE, current_red.y, current_red.x-LABY_CASE_SIZE , current_red.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE,color);
-            }
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 60, 0, 24, 72, al_map_rgb(255,255,255), 0, 0, current_red.x-LABY_WALL_SIZE, current_red.y, 1, 1, 0, 0);
+            }    
         }
     }
 
@@ -109,15 +106,19 @@ void afficherMaze(ALLEGRO_BITMAP* laby_texture){
             current_red.y = x*LABY_CASE_SIZE + Y_PLATEAU+LABY_WALL_SIZE;
             if(((grid[y][x] == 8) && (y!=0 && grid[y-1][x] == 7)) || ((x!=0 && grid[y][x-1] == 6) && (grid[y][x] == 5)) || ((x!=0 && grid[y][x-1] == 6) && (y!=0 && grid[y-1][x] == 7))){ // A GAUCHE ET EN HAUT
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 84, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_blue.x, current_blue.y-LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 96, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_red.x+LABY_CASE_SIZE-LABY_WALL_SIZE, current_red.y-LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
             }
             if(((grid[y][x] == 6) && (y!=0 && grid[y-1][x] == 7)) || ((grid[y][x] == 5) && (x != COLS-1 && grid[y][x+1] == 8)) || ((y!=0 && grid[y-1][x] == 7) && (x != COLS-1 && grid[y][x+1] == 8))){ // A DROITE ET EN HAUT
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 96, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_blue.x+LABY_CASE_SIZE-LABY_WALL_SIZE, current_blue.y-LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 60, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_red.x+LABY_CASE_SIZE-LABY_WALL_SIZE, current_red.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
             }
             if(((grid[y][x] == 8) && (y!=ROWS-1 && grid[y+1][x] == 5)) || ((x!=0 && grid[y][x-1] == 6) && (grid[y][x] == 7)) || ((y!=ROWS-1 && grid[y+1][x] == 5) && (x!=0 && grid[y][x-1] == 6))){ // A GAUCHE ET EN BAS
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 72, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_blue.x, current_blue.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 84, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_red.x, current_red.y-LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
             }
             if(((grid[y][x] == 6) && (y!=ROWS-1 && grid[y+1][x] == 5)) || ((grid[y][x] == 7) && (x != COLS-1 && grid[y][x+1] == 8)) || ((y!=ROWS-1 && grid[y+1][x] == 5) && (x != COLS-1 && grid[y][x+1] == 8))){ // A DROITE ET EN BAS
                 al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 60, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_blue.x+LABY_CASE_SIZE-LABY_WALL_SIZE, current_blue.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
+                al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 72, 72, 12, 36, al_map_rgb(255,255,255), 0, 0, current_red.x, current_red.y+LABY_CASE_SIZE-2*LABY_WALL_SIZE, 1, 1, 0, 0); // On pose une texture pour "cacher" la supperposition
             }
         }
     }

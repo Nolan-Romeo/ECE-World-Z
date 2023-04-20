@@ -51,19 +51,15 @@ int main(int argc, char* argv[]){
                         return 0;
                     case ALLEGRO_KEY_Z:
                         movePlayer(&player1, 1);
-                        printf(" Player %d:%d \n", player1.x, player1.y);
                         break;
                     case ALLEGRO_KEY_Q:
                         movePlayer(&player1, 4);
-                        printf(" Player %d:%d \n", player1.x, player1.y);
                         break;
                     case ALLEGRO_KEY_S:
                         movePlayer(&player1, 3);
-                        printf(" Player %d:%d \n", player1.x, player1.y);
                         break;
                     case ALLEGRO_KEY_D:
                         movePlayer(&player1, 2);
-                        printf(" Player %d:%d \n", player1.x, player1.y);
                         break;
                     default:
                         break;
