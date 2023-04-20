@@ -62,7 +62,7 @@ void LSCRemoveStart(Maillon** maillon){
     }
 }
 
-void afficherMaze(ALLEGRO_BITMAP* laby_texture){
+void afficherMaze(ALLEGRO_BITMAP *laby_texture){
     for(int x=0 ; x<ROWS ; x++){
         for (int y=0 ; y<COLS ; y++){
             ALLEGRO_COLOR color = (grid[y][x] == 0)? al_map_rgb(0, 0, 0): (grid[y][x] <= 4)? al_map_rgb(0, 0, 255): al_map_rgb(0, 0, 255);
