@@ -62,6 +62,14 @@ void LSCRemoveStart(Maillon** maillon){
     }
 }
 
+void afficherwater(ALLEGRO_BITMAP *laby_texture){
+    for(int i=0; i<15; i++){
+        for (int j=0 ; j<27 ; j++){
+            al_draw_tinted_scaled_rotated_bitmap_region(laby_texture,108, 0, 36, 36, al_map_rgb(255,255,255), 0, 0, 0+36*j*2, 0+36*i*2, 2, 2, 0, 0);
+        }
+    }
+}
+
 void afficherMaze(ALLEGRO_BITMAP *laby_texture){
     for(int x=0 ; x<ROWS ; x++){
         for (int y=0 ; y<COLS ; y++){

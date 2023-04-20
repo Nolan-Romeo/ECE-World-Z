@@ -142,6 +142,7 @@ int main(int argc, char* argv[]){
             //al_draw_rectangle(1600/2,0,1600/2,900,al_map_rgb(0,255,0),1);
             //al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
 
+            afficherwater(laby_texture);
             afficherMaze(laby_texture);
 
             //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
