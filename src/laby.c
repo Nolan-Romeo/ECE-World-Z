@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
 
     while (1){
 
-        frame = (frame>=59)?0: frame+1;
+        frame = (frame>=39)?0: frame+1;
         frame_lilypad = (frame_lilypad>=119)?0: frame_lilypad+1;   
 
         ALLEGRO_EVENT event;
@@ -51,28 +51,28 @@ int main(int argc, char* argv[]){
             case ALLEGRO_EVENT_TIMER:
                 redraw = true;
                 if(keystate.z){
-                    animation.y = 24*((frame/30)+1);
+                    animation.y = 24*((frame/20)+1);
                     animation.x = 24;  
                     if((movePlayer(&player1, 1) || offsetY > 0) && offsetX == 0){
                         offsetY -= 2;
                     }                  
                 }
                 if(keystate.q){
-                    animation.y = 24*((frame/30)+1);
+                    animation.y = 24*((frame/20));
                     animation.x = 48;
                     if((movePlayer(&player1, 4) || offsetX > 0) && offsetY == 0){
                         offsetX -= 2;
                     }                    
                 }
                 if(keystate.s){
-                    animation.y = 24*((frame/30)+1);
+                    animation.y = 24*((frame/20)+1);
                     animation.x = 0;
                     if((movePlayer(&player1, 3) || offsetY < 0) && offsetX == 0){
                         offsetY += 2;
                     }                    
                 }
                 if(keystate.d){
-                    animation.y = 24*((frame/30)+1);
+                    animation.y = 24*((frame/20));
                     animation.x = 48;
                     if((movePlayer(&player1, 2) || offsetX < 0) && offsetY == 0){
                         offsetX += 2;
