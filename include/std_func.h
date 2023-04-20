@@ -70,7 +70,7 @@ void afficherwater(ALLEGRO_BITMAP *laby_texture){
     }
 }
 
-void afficherMaze(ALLEGRO_BITMAP *laby_texture, Coord lilypad[5], int frame_lilypad){
+void afficherMaze(ALLEGRO_BITMAP *laby_texture, Lilypad lilypad[5], int frame_lilypad){
     for(int x=0 ; x<ROWS ; x++){
         for (int y=0 ; y<COLS ; y++){
             al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 0, 60, 72, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*x+LABY_WALL_SIZE, Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE, 1, 1, 0, 0);
@@ -198,7 +198,7 @@ void expand(int x, int y){
         
 }
 
-void generate_lilypad(Coord lilypad[5]){
+void generate_lilypad(Lilypad lilypad[5]){
     lilypad[0].x = getRandomInt(0, 4);
     lilypad[0].y = getRandomInt(0, 4);
     lilypad[1].x = getRandomInt(5, 10);
@@ -211,7 +211,7 @@ void generate_lilypad(Coord lilypad[5]){
     lilypad[4].y = getRandomInt(0, 10);
 }
 
-void generate_maze(ALLEGRO_BITMAP* laby_texture, Coord lilypad[5], int frame_lilypad){
+void generate_maze(ALLEGRO_BITMAP* laby_texture, Lilypad lilypad[5], int frame_lilypad){
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
             grid[i][j] = 0;
@@ -247,6 +247,31 @@ bool movePlayer(Player* player, int direction){
         break;
     }
     return false;
+}
+
+void stopMove(bool keystate[4], Animation animation, int direction){
+    switch(direction){
+    case 0:
+        keystate[0] = false;
+        animation.y = 0;   // IDLE FRONT
+        animation.x = 24;
+        break;
+    case 1:
+        keystate[1] = false;
+        animation.y = 0;    // IDLE DROITE
+        animation.x = 48;
+        break;
+    case 2:
+        keystate[2] = false;
+        animation.y = 0;    // IDLE BACK
+        animation.x = 0;
+        break;
+    case 3:
+        keystate[3] = false;
+        animation.y = 0;    // IDLE GAUCHE
+        animation.x = 48;
+        break;
+    }
 }
 
 #endif

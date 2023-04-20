@@ -52,16 +52,16 @@ typedef struct{
 }Coord;
 
 typedef struct{
+    int x, y;
+    bool used;
+}Lilypad;
+
+typedef struct{
     int x,y;
 }Player;
 
 typedef struct{
     int x,y;
 }Animation;
-
-typedef struct {
-    bool d, z, q, s;
-}Keystate;
-
 
 #endif

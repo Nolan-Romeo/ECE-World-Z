@@ -28,12 +28,14 @@ int main(int argc, char* argv[]){
     int frame = 0;
     int frame_lilypad = 0;
     Animation animation = {0,0};
-    Keystate keystate = {false, false, false, false};
+    bool keystate[4] = {false, false, false, false};
     int flip_img = 0;
 
     Player player1 = {0,0};
 
-    Coord lilypad[5] = {{0,0}};
+    Lilypad lilypad[5] = {{0,0, false}};
+
+    int control_change = 0;
 
     int offsetX = 0, offsetY = 0;
 
@@ -50,15 +52,17 @@ int main(int argc, char* argv[]){
         switch (event.type){
             case ALLEGRO_EVENT_TIMER:
                 redraw = true;
-                if(keystate.z){
+                if(keystate[0]){
+                    flip_img = 0;
                     animation.y = 24*((frame/20)+1);
                     animation.x = 24;
                     offsetX = (offsetX < 20 && offsetX > -20) ? 0 : (offsetX < -40)? -60: (offsetX > 40)? 60: offsetX;
                     if((movePlayer(&player1, 1) || offsetY > 0) && offsetX == 0){
                         offsetY -= 2;
-                    }        
+                    }    
                 }
-                if(keystate.q){
+                if(keystate[3]){
+                    flip_img = ALLEGRO_FLIP_HORIZONTAL;
                     animation.y = 24*((frame/20));
                     animation.x = 48;
                     offsetY = (offsetY < 20 && offsetY > -20) ? 0 : (offsetY < -40)? -60: (offsetY > 40)? 60: offsetY;
@@ -66,7 +70,8 @@ int main(int argc, char* argv[]){
                         offsetX -= 2;
                     }        
                 }
-                if(keystate.s){
+                if(keystate[2]){
+                    flip_img = 0;
                     animation.y = 24*((frame/20)+1);
                     animation.x = 0;
                     offsetX = (offsetX < 20 && offsetX > -20) ? 0 : (offsetX < -40)? -60: (offsetX > 40)? 60: offsetX;
@@ -74,7 +79,8 @@ int main(int argc, char* argv[]){
                         offsetY += 2;
                     }       
                 }
-                if(keystate.d){
+                if(keystate[1]){
+                    flip_img = 0;
                     animation.y = 24*((frame/20));
                     animation.x = 48;
                     offsetY = (offsetY < 20 && offsetY > -20) ? 0 : (offsetY < -40)? -60: (offsetY > 40)? 60: offsetY;
@@ -97,35 +103,31 @@ int main(int argc, char* argv[]){
                         return 0;
                     case ALLEGRO_KEY_Z:
                         frame = 0;
-                        flip_img = 0;
-                        keystate.z = true;
-                        keystate.q = false;
-                        keystate.s = false;
-                        keystate.d = false;
+                        keystate[control_change] = true;
+                        keystate[(control_change+3)%4] = false;
+                        keystate[(control_change+2)%4] = false;
+                        keystate[(control_change+1)%4] = false;
                         break;
                     case ALLEGRO_KEY_Q:
                         frame = 0;
-                        flip_img = ALLEGRO_FLIP_HORIZONTAL;
-                        keystate.z = false;
-                        keystate.q = true;
-                        keystate.s = false;
-                        keystate.d = false;
+                        keystate[control_change] = false;
+                        keystate[(control_change+3)%4] = true;
+                        keystate[(control_change+2)%4] = false;
+                        keystate[(control_change+1)%4] = false;
                         break;
                     case ALLEGRO_KEY_S:
                         frame = 0;
-                        flip_img = 0;
-                        keystate.z = false;
-                        keystate.q = false;
-                        keystate.s = true;
-                        keystate.d = false;
+                        keystate[control_change] = false;
+                        keystate[(control_change+3)%4] = false;
+                        keystate[(control_change+2)%4] = true;
+                        keystate[(control_change+1)%4] = false;
                         break;
                     case ALLEGRO_KEY_D:
                         frame = 0;
-                        flip_img = 0;
-                        keystate.z = false;
-                        keystate.q = false;
-                        keystate.s = false;
-                        keystate.d = true;
+                        keystate[control_change] = false;
+                        keystate[(control_change+3)%4] = false;
+                        keystate[(control_change+2)%4] = false;
+                        keystate[(control_change+1)%4] = true;
                         break;
                     default:
                         break;
@@ -135,29 +137,20 @@ int main(int argc, char* argv[]){
                 switch (event.keyboard.keycode){
                 case ALLEGRO_KEY_Z:
                     frame = 0;
-                    keystate.z = false;
-                    animation.y = 0;   // IDLE FRONT
-                    animation.x = 24;
+                    stopMove(keystate, animation, (0+control_change)%4);
                     break;
                 case ALLEGRO_KEY_Q:
                     frame = 0;
-                    keystate.q = false;
-                    animation.y = 0;    // IDLE GAUCHE
-                    animation.x = 48;
+                    stopMove(keystate, animation, (3+control_change)%4);
                     break;
                 case ALLEGRO_KEY_S:
                     frame = 0;
-                    keystate.s = false;
-                    animation.y = 0;    // IDLE BACK
-                    animation.x = 0; 
+                    stopMove(keystate, animation, (2+control_change)%4);
                     break;                   
                 case ALLEGRO_KEY_D:
                     frame = 0;
-                    keystate.d = false;
-                    animation.y = 0;    // IDLE DROITE
-                    animation.x = 48; 
+                    stopMove(keystate, animation, (1+control_change)%4);
                     break;
-                
                 default:
                     break;
                 }
@@ -189,8 +182,16 @@ int main(int argc, char* argv[]){
                 offsetY = 0;
             }
 
+            for(int i = 0; i < 5; i++){
+                if(player1.x == lilypad[i].x && player1.y == lilypad[i].y && lilypad[i].used == false){
+                    al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(0,255,0));
+                    control_change += 1;
+                    lilypad[i].used = true;
+                }
+            }
 
-            al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
+
+            //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
 
             al_draw_tinted_scaled_rotated_bitmap_region(character, 0+animation.x, 0+animation.y, 24, 24, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE+6+offsetX, Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE-6+offsetY, 2, 2, 0, flip_img);
             //(frame == 59)?printf("%d | \n",frame):printf("%d | ",frame);
