@@ -150,7 +150,7 @@ int main(int argc, char* argv[]){
                 case ALLEGRO_KEY_D:
                     frame = 0;
                     keystate.d = false;
-                    animation.y = 0;    // IDLE DROITE
+                    animation.y = 0;    // IDLE DROITE 
                     animation.x = 48; 
                     break;
                 
