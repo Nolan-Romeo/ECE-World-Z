@@ -36,12 +36,30 @@ int main(int argc, char* argv[]){
 
     while (1){
 
+        frame = (frame>=59)?0: frame+1;
+
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
 
         switch (event.type){
             case ALLEGRO_EVENT_TIMER:
                 redraw = true;
+                if(keystate.z){
+                    animation.y = 24*((frame/30)+1);
+                    animation.x = 24;                    
+                }
+                if(keystate.q){
+                    animation.y = 24*((frame/30)+1);
+                    animation.x = 48;                    
+                }
+                if(keystate.s){
+                    animation.y = 24*((frame/30)+1);
+                    animation.x = 0;                    
+                }
+                if(keystate.d){
+                    animation.y = 24*((frame/30)+1);
+                    animation.x = 48;
+                }
                 break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 al_destroy_display(disp);
@@ -56,21 +74,63 @@ int main(int argc, char* argv[]){
                         al_destroy_event_queue(queue);
                         return 0;
                     case ALLEGRO_KEY_Z:
+                        frame = 0;
+                        flip_img = 0;
+                        keystate.z = true;
                         movePlayer(&player1, 1);
                         break;
                     case ALLEGRO_KEY_Q:
+                        frame = 0;
+                        flip_img = ALLEGRO_FLIP_HORIZONTAL;
+                        keystate.q = true;
                         movePlayer(&player1, 4);
                         break;
                     case ALLEGRO_KEY_S:
+                        frame = 0;
+                        flip_img = 0;
+                        keystate.s = true;
                         movePlayer(&player1, 3);
                         break;
                     case ALLEGRO_KEY_D:
+                        frame = 0;
+                        flip_img = 0;
+                        keystate.d = true;
                         movePlayer(&player1, 2);
                         break;
                     default:
                         break;
                 } 
                 break;
+            case ALLEGRO_EVENT_KEY_UP:
+                switch (event.keyboard.keycode){
+                case ALLEGRO_KEY_Z:
+                    frame = 0;
+                    keystate.z = false;
+                    animation.y = 0;   // IDLE FRONT
+                    animation.x = 24;
+                    break;
+                case ALLEGRO_KEY_Q:
+                    frame = 0;
+                    keystate.q = false;
+                    animation.y = 0;    // IDLE GAUCHE
+                    animation.x = 48;
+                    break;
+                case ALLEGRO_KEY_S:
+                    frame = 0;
+                    keystate.s = false;
+                    animation.y = 0;    // IDLE BACK
+                    animation.x = 0; 
+                    break;                   
+                case ALLEGRO_KEY_D:
+                    frame = 0;
+                    keystate.d = false;
+                    animation.y = 0;    // IDLE DROITE
+                    animation.x = 48; 
+                    break;
+                
+                default:
+                    break;
+                }
             default:
                 break;
         }
@@ -85,8 +145,10 @@ int main(int argc, char* argv[]){
             afficherwater(laby_texture);
             afficherMaze(laby_texture);
 
-            al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
+            //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
 
+            al_draw_tinted_scaled_rotated_bitmap_region(character, 0+animation.x, 0+animation.y, 24, 24, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE+6, Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE-6, 2, 2, 0, flip_img);
+            //(frame == 59)?printf("%d | \n",frame):printf("%d | ",frame);
             al_flip_display();
 
             redraw = false;
