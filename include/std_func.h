@@ -62,7 +62,7 @@ void LSCRemoveStart(Maillon** maillon){
     }
 }
 
-void afficherMaze(ALLEGRO_BITMAP* laby_texture){
+void afficherMaze(ALLEGRO_BITMAP *laby_texture){
     for(int x=0 ; x<ROWS ; x++){
         for (int y=0 ; y<COLS ; y++){
             al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 0, 60, 72, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*x+LABY_WALL_SIZE, Y_PLATEAU+LABY_CASE_SIZE*y+LABY_WALL_SIZE, 1, 1, 0, 0);

@@ -55,4 +55,13 @@ typedef struct{
     int x,y;
 }Player;
 
+typedef struct{
+    int x,y;
+}Animation;
+
+typedef struct {
+    bool d, z, q, s;
+}Keystate;
+
+
 #endif
