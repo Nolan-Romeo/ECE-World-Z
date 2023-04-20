@@ -52,28 +52,32 @@ int main(int argc, char* argv[]){
                 redraw = true;
                 if(keystate.z){
                     animation.y = 24*((frame/20)+1);
-                    animation.x = 24;  
+                    animation.x = 24;
+                    offsetX = (offsetX < 20 && offsetX > -20) ? 0 : (offsetX < -40)? -60: (offsetX > 40)? 60: offsetX;
                     if((movePlayer(&player1, 1) || offsetY > 0) && offsetX == 0){
                         offsetY -= 2;
-                    }                  
+                    }        
                 }
                 if(keystate.q){
                     animation.y = 24*((frame/20));
                     animation.x = 48;
+                    offsetY = (offsetY < 20 && offsetY > -20) ? 0 : (offsetY < -40)? -60: (offsetY > 40)? 60: offsetY;
                     if((movePlayer(&player1, 4) || offsetX > 0) && offsetY == 0){
                         offsetX -= 2;
-                    }                    
+                    }        
                 }
                 if(keystate.s){
                     animation.y = 24*((frame/20)+1);
                     animation.x = 0;
+                    offsetX = (offsetX < 20 && offsetX > -20) ? 0 : (offsetX < -40)? -60: (offsetX > 40)? 60: offsetX;
                     if((movePlayer(&player1, 3) || offsetY < 0) && offsetX == 0){
                         offsetY += 2;
-                    }                    
+                    }       
                 }
                 if(keystate.d){
                     animation.y = 24*((frame/20));
                     animation.x = 48;
+                    offsetY = (offsetY < 20 && offsetY > -20) ? 0 : (offsetY < -40)? -60: (offsetY > 40)? 60: offsetY;
                     if((movePlayer(&player1, 2) || offsetX < 0) && offsetY == 0){
                         offsetX += 2;
                     }
@@ -150,7 +154,7 @@ int main(int argc, char* argv[]){
                 case ALLEGRO_KEY_D:
                     frame = 0;
                     keystate.d = false;
-                    animation.y = 0;    // IDLE DROITE 
+                    animation.y = 0;    // IDLE DROITE
                     animation.x = 48; 
                     break;
                 
@@ -184,7 +188,9 @@ int main(int argc, char* argv[]){
                 player1.y -= 1;
                 offsetY = 0;
             }
-            //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
+
+
+            al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
 
             al_draw_tinted_scaled_rotated_bitmap_region(character, 0+animation.x, 0+animation.y, 24, 24, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE+6+offsetX, Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE-6+offsetY, 2, 2, 0, flip_img);
             //(frame == 59)?printf("%d | \n",frame):printf("%d | ",frame);
