@@ -35,6 +35,8 @@ int main(int argc, char* argv[]){
 
     Coord lilypad[5] = {{0,0}};
 
+    int offsetX = 0, offsetY = 0;
+
     generate_maze(laby_texture, lilypad, frame_lilypad);
 
     while (1){
@@ -50,19 +52,31 @@ int main(int argc, char* argv[]){
                 redraw = true;
                 if(keystate.z){
                     animation.y = 24*((frame/30)+1);
-                    animation.x = 24;                    
+                    animation.x = 24;  
+                    if((movePlayer(&player1, 1) || offsetY > 0) && offsetX == 0){
+                        offsetY -= 2;
+                    }                  
                 }
                 if(keystate.q){
                     animation.y = 24*((frame/30)+1);
-                    animation.x = 48;                    
+                    animation.x = 48;
+                    if((movePlayer(&player1, 4) || offsetX > 0) && offsetY == 0){
+                        offsetX -= 2;
+                    }                    
                 }
                 if(keystate.s){
                     animation.y = 24*((frame/30)+1);
-                    animation.x = 0;                    
+                    animation.x = 0;
+                    if((movePlayer(&player1, 3) || offsetY < 0) && offsetX == 0){
+                        offsetY += 2;
+                    }                    
                 }
                 if(keystate.d){
                     animation.y = 24*((frame/30)+1);
                     animation.x = 48;
+                    if((movePlayer(&player1, 2) || offsetX < 0) && offsetY == 0){
+                        offsetX += 2;
+                    }
                 }
                 break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
@@ -81,25 +95,33 @@ int main(int argc, char* argv[]){
                         frame = 0;
                         flip_img = 0;
                         keystate.z = true;
-                        movePlayer(&player1, 1);
+                        keystate.q = false;
+                        keystate.s = false;
+                        keystate.d = false;
                         break;
                     case ALLEGRO_KEY_Q:
                         frame = 0;
                         flip_img = ALLEGRO_FLIP_HORIZONTAL;
+                        keystate.z = false;
                         keystate.q = true;
-                        movePlayer(&player1, 4);
+                        keystate.s = false;
+                        keystate.d = false;
                         break;
                     case ALLEGRO_KEY_S:
                         frame = 0;
                         flip_img = 0;
+                        keystate.z = false;
+                        keystate.q = false;
                         keystate.s = true;
-                        movePlayer(&player1, 3);
+                        keystate.d = false;
                         break;
                     case ALLEGRO_KEY_D:
                         frame = 0;
                         flip_img = 0;
+                        keystate.z = false;
+                        keystate.q = false;
+                        keystate.s = false;
                         keystate.d = true;
-                        movePlayer(&player1, 2);
                         break;
                     default:
                         break;
@@ -143,14 +165,28 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
 
-            
-
             afficherwater(laby_texture);
             afficherMaze(laby_texture, lilypad, frame_lilypad);
 
+            if(offsetX >= 60){
+                player1.x += 1;
+                offsetX = 0;
+            }
+            if(offsetX <= -60){
+                player1.x -= 1;
+                offsetX = 0;
+            }         
+            if(offsetY >= 60){
+                player1.y += 1;
+                offsetY = 0;
+            }
+            if(offsetY <= -60){
+                player1.y -= 1;
+                offsetY = 0;
+            }
             //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
 
-            al_draw_tinted_scaled_rotated_bitmap_region(character, 0+animation.x, 0+animation.y, 24, 24, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE+6, Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE-6, 2, 2, 0, flip_img);
+            al_draw_tinted_scaled_rotated_bitmap_region(character, 0+animation.x, 0+animation.y, 24, 24, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE+6+offsetX, Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE-6+offsetY, 2, 2, 0, flip_img);
             //(frame == 59)?printf("%d | \n",frame):printf("%d | ",frame);
             al_flip_display();
 

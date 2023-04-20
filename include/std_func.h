@@ -223,29 +223,30 @@ void generate_maze(ALLEGRO_BITMAP* laby_texture, Coord lilypad[5], int frame_lil
     afficherMaze(laby_texture, lilypad, frame_lilypad);
 }
 
-void movePlayer(Player* player, int direction){
+bool movePlayer(Player* player, int direction){
     switch (direction){
     case 1:
         if(player->y != 0 && (grid[player->y][player->x] == 5 || grid[player->y-1][player->x] == 7)){
-            player->y -= 1;
+            return true;
         }       
         break;
     case 2:
         if(player->x != COLS-1 && (grid[player->y][player->x] == 6 || grid[player->y][player->x+1] == 8)){
-            player->x += 1;
+            return true;
         }  
         break;
     case 3:
         if(player->y != ROWS-1 && (grid[player->y][player->x] == 7 || grid[player->y+1][player->x] == 5)){
-            player->y += 1;
+            return true;
         }
         break;
     case 4:
         if(player->x != 0 && (grid[player->y][player->x] == 8 || grid[player->y][player->x-1] == 6)){
-            player->x -= 1;
+            return true;
         } 
         break;
     }
+    return false;
 }
 
 #endif
