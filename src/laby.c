@@ -26,17 +26,21 @@ int main(int argc, char* argv[]){
     bool redraw = true;
 
     int frame = 0;
+    int frame_lilypad = 0;
     Animation animation = {0,0};
     Keystate keystate = {false, false, false, false};
     int flip_img = 0;
 
     Player player1 = {0,0};
 
-    generate_maze(laby_texture);
+    Coord lilypad[5] = {{0,0}};
+
+    generate_maze(laby_texture, lilypad, frame_lilypad);
 
     while (1){
 
         frame = (frame>=59)?0: frame+1;
+        frame_lilypad = (frame_lilypad>=119)?0: frame_lilypad+1;   
 
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
@@ -139,11 +143,10 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
 
-            //al_draw_rectangle(1600/2,0,1600/2,900,al_map_rgb(0,255,0),1);
-            //al_draw_rectangle(0,900/2,1600,900/2,al_map_rgb(0,255,0),1);
+            
 
             afficherwater(laby_texture);
-            afficherMaze(laby_texture);
+            afficherMaze(laby_texture, lilypad, frame_lilypad);
 
             //al_draw_filled_rectangle(X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_WALL_SIZE,X_PLATEAU+LABY_CASE_SIZE*player1.x+LABY_CASE_SIZE-LABY_WALL_SIZE,Y_PLATEAU+LABY_CASE_SIZE*player1.y+LABY_CASE_SIZE-LABY_WALL_SIZE,al_map_rgb(255,0,0));
 
