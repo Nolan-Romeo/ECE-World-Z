@@ -23,11 +23,6 @@
 #define MAX_ITERATIONS 1000
 
 int grid[ROWS][COLS];
-int startRow = 0;
-int startCol = 0;
-int endRow = ROWS - 1;
-int endCol = COLS - 1;
-int maxLength = 30;
 
 typedef struct Maillon{
     int xNext, yNext;

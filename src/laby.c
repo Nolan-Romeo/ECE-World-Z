@@ -43,9 +43,6 @@ int main(int argc, char* argv[]){
 
     while (1){
 
-        frame = (frame>=39)?0: frame+1;
-        frame_lilypad = (frame_lilypad>=119)?0: frame_lilypad+1;   
-
         ALLEGRO_EVENT event;
         al_wait_for_event(queue, &event);
 
@@ -159,6 +156,9 @@ int main(int argc, char* argv[]){
         }
 
         if(redraw && al_is_event_queue_empty(queue)){
+
+            frame = (frame>=39)?0: frame+1;
+            frame_lilypad = (frame_lilypad>=119)?0: frame_lilypad+1;   
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
 
