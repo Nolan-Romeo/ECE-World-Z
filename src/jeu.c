@@ -1,5 +1,12 @@
 #include "std_iso.h"
 
+typedef struct 
+{
+    int position_x;
+    int position_y;
+    int image;
+};
+
 int main()
 {
     srand(time(NULL));
@@ -30,6 +37,7 @@ int main()
     
     bool redraw=true;
     int fin=0;
+    int image=4;
 
     while(!fin){
 
@@ -44,10 +52,39 @@ int main()
             ALLEGRO_KEYBOARD_STATE keyboard_state;
             al_get_keyboard_state(&keyboard_state);
             if(al_key_down(&keyboard_state, ALLEGRO_KEY_ESCAPE)) fin=1;
+            else if(al_key_down(&keyboard_state, ALLEGRO_KEY_SPACE)) image--;
         }
         if(redraw){
+
             al_draw_scaled_bitmap(fond,0,0,612,404,0,0,1920,1080,0);
-            al_draw_tinted_scaled_rotated_bitmap_region(taupe, 103*1, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, 500, 500, 3, 3, 0, 0);
+
+            switch (getRandomInt(0,4))
+            {
+            case 0 :
+                al_draw_tinted_scaled_rotated_bitmap_region(taupe, 103*image, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, 500, 500, 3, 3, 0, 0);
+                break;
+            case 1 :
+                al_draw_tinted_scaled_rotated_bitmap_region(taupe, 103*image, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, 1000, 500, 3, 3, 0, 0);
+                break;
+            case 2 : 
+                al_draw_tinted_scaled_rotated_bitmap_region(taupe, 103*image, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, 400, 700, 3, 3, 0, 0);
+                break;
+            case 3 :
+                al_draw_tinted_scaled_rotated_bitmap_region(taupe, 103*image, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, 800, 700, 3, 3, 0, 0);
+                break;
+            case (4) :
+                al_draw_tinted_scaled_rotated_bitmap_region(taupe, 103*image, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, 1200, 700, 3, 3, 0, 0);
+                break;
+            default:
+                break;
+            }
+
+            
+            
+            
+            
+            
+            
             al_flip_display();
         }
     }
