@@ -6,13 +6,13 @@ BINDIR = bin
 
 LIBS = -lallegro -lallegro_font -lallegro_primitives -lallegro_image
 
-all: $(BINDIR)/main run
+all: $(BINDIR)/jeu run
 
-$(BINDIR)/main: $(SRCDIR)/main.c
+$(BINDIR)/jeu: $(SRCDIR)/jeu.c
 	@$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 run: 
-	@./$(BINDIR)/main
+	@./$(BINDIR)/jeu
 
 clean:
-	del "$(BINDIR)\main.exe"
+	del "$(BINDIR)\jeu.exe"
