@@ -9,9 +9,12 @@ int main(int argc, char* argv[]){
     al_init_primitives_addon();
     al_init_image_addon();
 
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
+    double fps = 60.0;
+
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / fps);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
     ALLEGRO_DISPLAY* disp = al_create_display(WIDTH, HEIGHT);
+    ALLEGRO_FONT* font = al_create_builtin_font();
 
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
@@ -21,19 +24,31 @@ int main(int argc, char* argv[]){
     al_start_timer(timer);
 
     bool redraw = true;
-    int time = 0;
-    int periode = 120;
-    double w0 = (M_PI*2)/periode;
-    int longueur = 500;
-    int cx = 1920/3, cy = 1080/4;
-    double v_max = w0*M_PI_2;
-    int ball_radius = 20;
-    double resolution_trainee = 2; // plus la valeur est élevé moins des cercles sont dessinés
-    int longeur_trainee = 200; // plus la valeur est élevée plus la trainée est courte
 
-    double angle = -M_PI_2;
+    double angle = 0;
     double speed = 0;
-    double gravity = 0.000002;
+    double gravity = 0.05;
+
+    double time = 0;
+    int t_launch = 0;
+    int meter_to_pixel = 20;
+    double periode = 2; // en secondes
+    double max_angle = M_PI/4*3;
+    double w0 = (M_PI*2)/periode;
+    int longueur = 10*meter_to_pixel;
+    int cx = 1920/3, cy = 1080/4;
+
+    int ball_x = cx+sin(angle)*longueur;
+    int ball_y = cy+cos(angle)*longueur;
+
+    int ballisticX, ballisticY;
+
+    double cameraX = 1920/2-ball_x, cameraY = 1080/2-ball_y;
+
+    double v_max = w0*max_angle;
+    int ball_radius = 1*meter_to_pixel;
+    double resolution_trainee = 2; // plus la valeur est élevé moins des cercles sont dessinés
+    int longeur_trainee = 100*meter_to_pixel; // plus la valeur est élevée plus la trainée est courte
 
     double angle0 = angle;
     double speed0 = speed;
@@ -63,6 +78,14 @@ int main(int argc, char* argv[]){
                         return 0;
                     case ALLEGRO_KEY_SPACE:
                         launched = !launched;
+                        int t = 0;
+                        int t0 = 0;
+                        t_launch = t0;
+                        while(y0+(0.5*gravity*t*t-speed0*sin(angle0)*t) < cy+longueur+1*meter_to_pixel){
+                            t+=1;
+                        }
+                        int distanceX = x0-cx+speed0*cos(angle0)*t;
+                        printf("distance parcourue : %d", distanceX/meter_to_pixel);
                         break;
                     default:
                         break;
@@ -76,12 +99,12 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
 
-            time = (time+1)%periode;
-            angle = M_PI_2*cos(time*w0);
-            speed = w0*M_PI_2*sin(time*w0);
+            time = (time < periode)? time+1.0/fps: 0;
+            angle = max_angle*cos(time*w0+M_PI_2); // en radians
+            speed = -w0*max_angle*sin(time*w0+M_PI_2); // en radians par seconde
 
-            int ball_x = cx+sin(angle)*longueur;
-            int ball_y = cy+cos(angle)*longueur;
+            ball_x = cx+sin(angle)*longueur;
+            ball_y = cy+cos(angle)*longueur;
 
             if(!launched){
                 angle0 = angle;
@@ -90,25 +113,31 @@ int main(int argc, char* argv[]){
                 y0 = ball_y;
             }
 
-            int w = speed*longueur;
+            double w = speed*longueur; // en pixels par seconde
 
-            al_draw_line(cx, cy, ball_x, ball_y, al_map_rgb(255,255,255), 4);
+            ballisticX = x0+speed0*cos(angle0)*t_launch/(10.0/meter_to_pixel);
+            ballisticY = y0+(0.5*gravity*t_launch*t_launch-speed0*sin(angle0)*t_launch)/(10.0/meter_to_pixel);
+
+            cameraX = 1920/2-ballisticX;
+            cameraY = 1080/2-ballisticY;
+
+            al_draw_line(cx+cameraX, cy+cameraY, ball_x+cameraX, ball_y+cameraY, al_map_rgb(255,255,255), 4);
 
             for(int i=0; i<ball_radius/resolution_trainee; i++){
-                al_draw_filled_circle(cx+sin(angle+M_PI/longeur_trainee*i*(speed/v_max)*resolution_trainee)*longueur, cy+cos(angle+M_PI/longeur_trainee*i*(speed/v_max)*resolution_trainee)*longueur, ball_radius-i*resolution_trainee, al_map_rgb(255,255,255));
+                al_draw_filled_circle(cx+sin(angle-M_PI/longeur_trainee*i*(speed/v_max)*resolution_trainee)*longueur+cameraX, cy+cos(angle-M_PI/longeur_trainee*i*(speed/v_max)*resolution_trainee)*longueur+cameraY, ball_radius-i*resolution_trainee, al_map_rgb(255,255,255));
             }  
 
-            if(speed0 < 0){
-                for(double x=0.0; x<1600.0; x+=10){
-                    al_draw_filled_circle(x0+x, y0+(gravity*x*x)/(2*speed0*speed0*cos(angle0)*cos(angle0))-tan(angle0)*x, 4, al_map_rgb(255,255,255));
-                }
-            }else{
-                for(double x=0.0; x>-1600.0; x-=10){
-                    al_draw_filled_circle(x0+x, y0+(gravity*x*x)/(2*speed0*speed0*cos(angle0)*cos(angle0))-tan(angle0)*x, 4, al_map_rgb(255,255,255));
-                }
+            if(y0+(0.5*gravity*t_launch*t_launch-speed0*sin(angle0)*t_launch)/(10.0/meter_to_pixel) < cy+longueur+1*meter_to_pixel && launched){
+                al_draw_filled_circle(x0+speed0*cos(angle0)*t_launch/(10.0/meter_to_pixel)+cameraX, y0+(0.5*gravity*t_launch*t_launch-speed0*sin(angle0)*t_launch)/(10.0/meter_to_pixel)+cameraY, 4, al_map_rgb(255,255,255));
+                t_launch+=1;
             }
 
-            printf("v max : %f \n", speed);
+            al_draw_line(cx+cameraX, cy+longueur+1*meter_to_pixel+cameraY, cx+10000+cameraX, cy+longueur+1*meter_to_pixel+cameraY, al_map_rgb(255,255,255), 1);
+            for(int i = 0; i < 10000; i += meter_to_pixel*10){
+                al_draw_line(cx+i+cameraX, cy+longueur+1*meter_to_pixel+cameraY, cx+i+cameraX, cy+longueur+1*meter_to_pixel+10+cameraY, al_map_rgb(255,255,255), 1);
+            }
+
+            al_draw_textf(font, al_map_rgb(255,255,255), 10, 10, 0, "vitesse : %f", w);
 
             al_flip_display();
 
