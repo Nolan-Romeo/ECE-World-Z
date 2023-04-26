@@ -59,4 +59,12 @@ typedef struct{
     int x,y;
 }Animation;
 
+typedef struct{
+    double pos;
+    bool explosion_state;
+    bool stop;
+    int frame_explosion;
+    int chain_count;
+}Barrel;
+
 #endif
