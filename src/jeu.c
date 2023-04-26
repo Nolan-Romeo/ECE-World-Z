@@ -31,17 +31,16 @@ int main()
 
     al_show_mouse_cursor(fenetre);
 
-    ALLEGRO_BITMAP*fond = load_image("img/carte.png");
+    ALLEGRO_BITMAP*fond = load_image("img/background.bmp");
     ALLEGRO_BITMAP*taupe_img =load_image("img/taupe.bmp");
 
     al_start_timer(timer);
 
-    Taupe taupe[6] = { 400, 500, 4, 0,
-                       800, 500, 4, 0,
-                       1200, 500, 4, 0,
-                       400, 700, 4, 0,
-                       800, 700, 4, 0,
-                       1200, 700, 4, 0
+    Taupe taupe[5] = { 10, 670, 4, 0,
+                       230, 670, 4, 0,
+                       600, 670, 4, 0,
+                       1000, 670, 4, 0,
+                       1600, 670, 4, 0
                     };
     
     bool redraw=true;
@@ -65,9 +64,9 @@ int main()
         }
         if(redraw){
 
-            changePosition = (changePosition>=60)?0 : changePosition+1;
+            changePosition = (changePosition >= 400)?0 : changePosition+1;
 
-            al_draw_scaled_bitmap(fond,0,0,612,404,0,0,1920,1080,0);
+            al_draw_scaled_bitmap(fond,0,0,1920,1080,0,0,1920,1080,0);
                    
 /*             if(changePosition == getRandomInt(30,60)){
                 
@@ -81,18 +80,38 @@ int main()
                     if(taupe[i].statut == 0) taupe[i].statut=4;
                 }     
             }*/
-
-            for (int i = 0; i < 6; i++)
+       
+            for (int i = 0; i < 5; i++)
             {
-                al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 103*4, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);
+                al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 103*taupe[i].statut, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);
             }
 
-            int ordre[6] = {1,2,3,4,5,6};
-            melangerTab(ordre, 6);
+            int ordre[5] = {1,2,3,4,5};
+            melangerTab(ordre, 5);
 
-            for(int i = 0; i < 6; i++){
+            for(int i = 0; i < 5; i++){
                 taupe[i].visible = ordre[i];
             }
+            
+            /* int compare = 1;
+            for (int j = 0; j < 5; j++)
+            {   
+                int i=0;
+                while(compare != taupe[i].visible){
+                    i++;
+                }
+                compare++;
+                taupe[i].statut = changePosition/20;
+            } */
+
+            /* for(int i = 0; i < 5; i++){
+                if((double)changePosition-(taupe[i].visible*60) <= 0){
+                    taupe[i].statut = 4;
+                }else {
+                    taupe[i].statut = 4-changePosition/60.0-taupe[i].visible;
+                }
+                //taupe[i].statut = 4;
+            } */
             
             
           
