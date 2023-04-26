@@ -123,10 +123,11 @@ int main(int argc, char* argv[]){
                     al_draw_bitmap(barrel_img,816+160*j, (barrel[j].pos+64)-400,0);
                 }
                 else{
-                    for (int i = -1; i < barrel[j].chain_count+3; i++){
+                    for (int i = -2; i < barrel[j].chain_count+3; i++){
                         al_draw_bitmap(chain,860+160*j,-400+(frame_bg*10/3)-32*i,0); // REGLER LE -32
+                        //printf("%d | ",-400+(frame_bg*10/3)-32*(-2));
                     }                    
-                    al_draw_bitmap(barrel_img,816+160*j, -400+(frame_bg*10/3)+64,0); // REGLER LE +64
+                    al_draw_bitmap(barrel_img,816+160*j,-400+(frame_bg*10/3)+96,0); // REGLER LE +64
                     //printf("%d | ",(-400+(frame_bg*10/3)+64));
                 }
 
@@ -142,6 +143,7 @@ int main(int argc, char* argv[]){
             
             al_draw_bitmap(liane,830,-400+(frame_bg*10/3)-camera,0);
             al_draw_bitmap(liane,830+128+32,-400+(frame_bg*10/3)-camera,ALLEGRO_FLIP_HORIZONTAL);
+            //printf("%f | ",-400+(frame_bg*10/3)-camera);
 
             //al_draw_line(960,0,960,1080,al_map_rgb(0,255, 0),1);
             //al_draw_line(0,1080/2,1920,1080/2,al_map_rgb(0,255, 0),1);
