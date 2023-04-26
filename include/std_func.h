@@ -15,6 +15,17 @@ int getRandomInt(int min, int max){
     return i;
 }
 
+void melangerTab(int* tab, size_t tailleTab){
+    int j; //position avec laquelle notre valeur va être échangée
+    uint8_t buffer;
+    for(int i = 0; i < tailleTab; i++){ //on parcours le tableau pour échanger la valeur d'une case avec une autre
+        j = getRandomInt(0,tailleTab-1); //on génère l'indice de la case avec laquelle notre valeur est échangée
+        buffer = tab[j]; //on mémorise la valeur pour ne pas la perdre
+        tab[j] = tab[i]; //on met i dans j
+        tab[i] = buffer; //on met j dans i
+    }
+}
+
 ALLEGRO_BITMAP* load_image_macro(char* path, int line, const char* file, const char* func){
     ALLEGRO_BITMAP* img = al_load_bitmap(path);
     if(img == NULL) {
