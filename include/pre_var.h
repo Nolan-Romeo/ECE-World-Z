@@ -27,4 +27,12 @@ typedef struct{
     int Fcoast, Hcoast;
 }TileToExpand;
 
+typedef struct {
+    int position_x;
+    int position_y;
+    int statut;
+    int visible;
+}Taupe;
+
+
 #endif

@@ -73,4 +73,27 @@ void LSCRemoveStart(Maillon** maillon){
     }
 }
 
+
+
+void afficher_taupe(Taupe taupe[],ALLEGRO_BITMAP*taupe_img, int *frame){
+	*frame=(*frame == 0)?80:*frame-1;
+	for(int i=0; i<5; i++){
+			if(taupe[i].visible){
+				al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 0+103*(*frame/20), 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);}
+			else{
+				al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 103*4, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);} 
+			}
+	}           
+void random_taupe(Taupe taupe[]){
+        if(taupe[1].visible==0 && taupe[2].visible==0 && taupe[3].visible == 0 && taupe[4].visible == 0 && taupe[0].visible==0){
+            int i= getRandomInt(0,4);
+            taupe[i].visible=1;
+                }
+		else {
+			for(int j=0; j<5; j++){
+				taupe[j].visible=0;
+			}
+		}
+            }
+
 #endif
