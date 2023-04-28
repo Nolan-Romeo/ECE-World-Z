@@ -30,18 +30,28 @@ int main(int argc, char* argv[]){
 
     bool launched = false;
 
-    double x = 0.0, y = 0.0, x2 = 0.0, y2 = 0.0;
-    double v, vx, vy;
+    double cameraX, cameraY;
+
+    double x01 = 0.0, y01 = 0.0, x11 = 0.0, y11 = 0.0, x21 = 0.0, y21 = 0.0;
+    double v01 = 0.0, vx01 = 0.0, vy01 = 0.0;
     double theta = 0.0; // en rad
     double v_theta = 0.0; // en rad/s
     double t = 0.0, t2 = 0.0; // en s
 
-    double zoom = 30.0;
+    double zoom = 45.0;
 
     const double g = 9.81;
     const double l = 10.0;
     const double periode = 2*M_PI*sqrt(l/g); // en s
     const double w0 = 2*M_PI/periode; // en s^-1
+
+	double alpha = 0.1;
+	double w = sqrt(pow(w0, 2)-pow(alpha, 2));
+	double A = -3*M_PI/4;
+	double B = (alpha*A)/w;
+
+	double F_A = 0.0; // force excitatrice
+	int force_direction = 0;
 
     while (1){
 
@@ -69,10 +79,26 @@ int main(int argc, char* argv[]){
                             launched = !launched;
                             t2 = 0.0;
                             break;
+						case ALLEGRO_KEY_Q:
+							force_direction = 1;
+							break;
+						case ALLEGRO_KEY_D:
+							force_direction = 2;
+							break;
                         default:
                             break;
                     } 
                     break;
+				case ALLEGRO_EVENT_KEY_UP:
+                switch (event.keyboard.keycode){
+					case ALLEGRO_KEY_Q:
+					case ALLEGRO_KEY_D:
+						force_direction = 0;
+						break;
+					default:
+						break;
+					}
+				
                 default:
                     break;
             }
@@ -82,32 +108,63 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
 
+            t += 1.0/60.0;
+
+            //theta = -3*M_PI/4*cos(w0*t);
+
+			theta = exp(-alpha*t)*(A*cos(w*t) + B*sin(w*t)) + F_A/pow(w0, 2);
+
+            x01 = sin(theta)*l;
+            y01 = cos(theta)*l;
+
             if(!launched){ // mouvement d'oscillation sur le pendule
-                t += 1.0/60.0;
+                x11 = x01; y11 = y01;
 
-                theta =-3*M_PI/4*cos(w0*t);
+                //v_theta = w0*3*M_PI/4*sin(w0*t);
 
-                v_theta = -w0*3*M_PI/4*sin(w0*t);
+				v_theta = -alpha*exp(-alpha*t)*(A*cos(w*t) + B*sin(w*t)) + exp(-alpha*t)*(-A*w*sin(w*t) + B*w*cos(w*t));
 
-                v = v_theta*l;
-                vx = v*cos(theta*t);
-                vy = v*sin(theta*t);
+                v01 = v_theta*l;
+                vx01 = v01*cos(theta);
+                vy01 = v01*sin(theta);
 
-                x = sin(theta)*l;
-                y = cos(theta)*l;                
+                cameraX = -(x01*zoom)+1920/2;
+                cameraY = -(y01*zoom)+1080/2;
 
-                al_draw_line(500, 500, 500+x*zoom, 500+y*zoom, al_map_rgb(255, 255, 255), 2);
+				al_draw_bitmap(background, cameraX-500, cameraY-300, 0);
+				al_draw_bitmap(background, cameraX-500-3510, cameraY-300, 0);
+				al_draw_bitmap(background, cameraX-500+3510, cameraY-300, 0);
+				al_draw_filled_rectangle(0, 0, 1920, cameraY-300, al_map_rgb(30,32,30));
+				al_draw_filled_rectangle(0, cameraY-300+1080, 1920, 1080, al_map_rgb(30,32,30));
+
+                al_draw_tinted_scaled_rotated_bitmap_region(character, 0, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, -theta, 0);
+
             }else {
-
                 t2 += 1.0/60.0;
 
-                x2 = vx*t2+x;
-                y2 = -0.5*g*pow(t2,2)+vy*t2+y;
+				if(0.5*g*pow(t2,2)-vy01*t2+y11 < 12){
+					x21 = vx01*t2+x11;
+                	y21 = 0.5*g*pow(t2,2)-vy01*t2+y11;
+				}
 
-                al_draw_filled_circle(500+x2*zoom, 500+y2*zoom, 4, al_map_rgb(255, 255, 255));
+                cameraX = -(x21*zoom)+1920/2;
+                cameraY = -(y21*zoom)+1080/2;
+
+				al_draw_bitmap(background, cameraX-500, cameraY-300, 0);
+				al_draw_bitmap(background, cameraX-500-3510, cameraY-300, 0);
+				al_draw_bitmap(background, cameraX-500+3510, cameraY-300, 0);
+				al_draw_filled_rectangle(0, 0, 1920, cameraY-300, al_map_rgb(30,32,30));
+				al_draw_filled_rectangle(0, cameraY-300+1080, 1920, 1080, al_map_rgb(30,32,30));
+
+                al_draw_tinted_scaled_rotated_bitmap_region(character, 0, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, 0, 0);
             }
 
-            al_draw_textf(font, al_map_rgb(255,255,255), 10, 10, 0, "vitesse : %0.1f", v_theta);
+            al_draw_line(cameraX, cameraY, x01*zoom+cameraX, y01*zoom+cameraY, al_map_rgb(255, 255, 255), 2);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01+cameraX, y01*zoom+cameraY, al_map_rgb(255, 0, 0), 2);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+cameraX, y01*zoom-vy01+cameraY, al_map_rgb(255, 0, 0), 2);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01+cameraX, y01*zoom-vy01+cameraY, al_map_rgb(0, 255, 0), 2);
+
+            al_draw_textf(font, al_map_rgb(255,255,255), 10, 10, 0, "vitesse : %0.1f", F_A);
 
             al_flip_display();
 
@@ -115,6 +172,8 @@ int main(int argc, char* argv[]){
         }
     }
 
+	al_destroy_bitmap(background);
+	al_destroy_bitmap(character);
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
