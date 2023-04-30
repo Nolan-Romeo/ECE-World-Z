@@ -25,6 +25,7 @@ int main(int argc, char* argv[]){
 
     ALLEGRO_BITMAP *background = load_image("img/background_liane.bmp");
     ALLEGRO_BITMAP *character = load_image("img/character.bmp");
+	ALLEGRO_BITMAP *liane = load_image("img/liane.bmp");
 
     bool redraw = true;
 
@@ -47,11 +48,14 @@ int main(int argc, char* argv[]){
 
 	double alpha = 0.1;
 	double w = sqrt(pow(w0, 2)-pow(alpha, 2));
-	double A = -3*M_PI/4;
+	double A = -(3*M_PI)/4;
 	double B = (alpha*A)/w;
 
 	double F_A = 0.0; // force excitatrice
 	int force_direction = 0;
+	int t_force = 0;
+
+	double player_angle = 0;
 
     while (1){
 
@@ -80,10 +84,12 @@ int main(int argc, char* argv[]){
                             t2 = 0.0;
                             break;
 						case ALLEGRO_KEY_Q:
-							force_direction = 1;
+							F_A = 0;
+							force_direction = -1;
 							break;
 						case ALLEGRO_KEY_D:
-							force_direction = 2;
+							F_A = 0;
+							force_direction = 1;
 							break;
                         default:
                             break;
@@ -92,6 +98,8 @@ int main(int argc, char* argv[]){
 				case ALLEGRO_EVENT_KEY_UP:
                 switch (event.keyboard.keycode){
 					case ALLEGRO_KEY_Q:
+						force_direction = 0;
+						break;
 					case ALLEGRO_KEY_D:
 						force_direction = 0;
 						break;
@@ -112,7 +120,7 @@ int main(int argc, char* argv[]){
 
             //theta = -3*M_PI/4*cos(w0*t);
 
-			theta = exp(-alpha*t)*(A*cos(w*t) + B*sin(w*t)) + F_A/pow(w0, 2);
+			theta = exp(-alpha*t)*(A*cos(w*t) + B*sin(w*t));
 
             x01 = sin(theta)*l;
             y01 = cos(theta)*l;
@@ -120,9 +128,11 @@ int main(int argc, char* argv[]){
             if(!launched){ // mouvement d'oscillation sur le pendule
                 x11 = x01; y11 = y01;
 
-                //v_theta = w0*3*M_PI/4*sin(w0*t);
+				double Q = w0/(2*alpha);
 
 				v_theta = -alpha*exp(-alpha*t)*(A*cos(w*t) + B*sin(w*t)) + exp(-alpha*t)*(-A*w*sin(w*t) + B*w*cos(w*t));
+
+                //v_theta = w0*3*M_PI/4*sin(w0*t);
 
                 v01 = v_theta*l;
                 vx01 = v01*cos(theta);
@@ -137,7 +147,7 @@ int main(int argc, char* argv[]){
 				al_draw_filled_rectangle(0, 0, 1920, cameraY-300, al_map_rgb(30,32,30));
 				al_draw_filled_rectangle(0, cameraY-300+1080, 1920, 1080, al_map_rgb(30,32,30));
 
-                al_draw_tinted_scaled_rotated_bitmap_region(character, 0, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, -theta, 0);
+				player_angle = -theta;
 
             }else {
                 t2 += 1.0/60.0;
@@ -156,15 +166,19 @@ int main(int argc, char* argv[]){
 				al_draw_filled_rectangle(0, 0, 1920, cameraY-300, al_map_rgb(30,32,30));
 				al_draw_filled_rectangle(0, cameraY-300+1080, 1920, 1080, al_map_rgb(30,32,30));
 
-                al_draw_tinted_scaled_rotated_bitmap_region(character, 0, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, 0, 0);
+				player_angle = 0;
             }
 
-            al_draw_line(cameraX, cameraY, x01*zoom+cameraX, y01*zoom+cameraY, al_map_rgb(255, 255, 255), 2);
-            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01+cameraX, y01*zoom+cameraY, al_map_rgb(255, 0, 0), 2);
-            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+cameraX, y01*zoom-vy01+cameraY, al_map_rgb(255, 0, 0), 2);
-            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01+cameraX, y01*zoom-vy01+cameraY, al_map_rgb(0, 255, 0), 2);
+            //al_draw_line(cameraX, cameraY, x01*zoom+cameraX, y01*zoom+cameraY, al_map_rgb(255, 255, 255), 2);
+			al_draw_scaled_rotated_bitmap(liane, 22, 0, cameraX, cameraY, 2.5, 2.5, -theta, 0);
+			al_draw_tinted_scaled_rotated_bitmap_region(character, 48, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, player_angle, 0);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01*5+cameraX, y01*zoom+cameraY, al_map_rgb(255, 0, 0), 2);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+cameraX, y01*zoom-vy01*5+cameraY, al_map_rgb(255, 0, 0), 2);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01*5+cameraX, y01*zoom-vy01*5+cameraY, al_map_rgb(0, 255, 0), 2);
 
-            al_draw_textf(font, al_map_rgb(255,255,255), 10, 10, 0, "vitesse : %0.1f", F_A);
+            al_draw_textf(font, al_map_rgb(255,255,255), 10, 10, 0, "sense poussée : %d", force_direction);
+			al_draw_textf(font, al_map_rgb(255,255,255), 10, 20, 0, "vitesse : %0.1f", v_theta);
+			al_draw_textf(font, al_map_rgb(255,255,255), 10, 30, 0, "F_A : %0.01f", F_A);
 
             al_flip_display();
 
