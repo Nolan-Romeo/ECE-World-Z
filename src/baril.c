@@ -85,10 +85,10 @@ int main(int argc, char* argv[]){
                             intro = true;
                             break;
                         case ALLEGRO_KEY_J:
-                            barrel[1].stop = true;
+                            if( (400-(frame_bg*10/3)+camera) >= 400) barrel[1].stop = true;
                             break;
                         case ALLEGRO_KEY_G:
-                            barrel[0].stop = true;    
+                            if( (400-(frame_bg*10/3)+camera) >= 400) barrel[0].stop = true;   
                             break;  
                         default:
                             break;
@@ -124,23 +124,12 @@ int main(int argc, char* argv[]){
                     //printf("%f | ",(barrel[0].pos+64)-400);
                 }
                 else{
-                    if(barrel[j].stop == true){
-                        for (int i = -2; i < barrel[j].chain_count+3; i++){
-                            al_draw_bitmap(chain,860+160*j,(-400+(frame_bg*10/3)-32*i)-camera+96+128,0);
-                            //printf("%f | ",camera);
-                            //printf("%d | ",-400+(frame_bg*10/3)-32*(-2));
-                        }                    
-                        al_draw_bitmap(barrel_img,816+160*j,(-400+(frame_bg*10/3)+96)-camera+96+128,0); 
-                        //printf("%d | ",(-400+(frame_bg*10/3)+96));
-                    }
-                    else{
-                        for (int i = -2; i < barrel[j].chain_count+3; i++){
-                            al_draw_bitmap(chain,860+160*j,-400+(frame_bg*10/3)-32*i,0);
-                            //printf("%d | ",-400+(frame_bg*10/3)-32*(-2));
-                        }                    
-                        al_draw_bitmap(barrel_img,816+160*j,-400+(frame_bg*10/3)+96,0); 
-                        //printf("%d | ",(-400+(frame_bg*10/3)+96));
-                    }
+                    for (int i = -2; i < barrel[j].chain_count+3; i++){
+                        al_draw_bitmap(chain,860+160*j,-400+(frame_bg*10/3)-32*i,0);
+                        //printf("%d | ",-400+(frame_bg*10/3)-32*(-2));
+                    }                    
+                    al_draw_bitmap(barrel_img,816+160*j,-400+(frame_bg*10/3)+96,0); 
+                    //printf("%d | ",(-400+(frame_bg*10/3)+96));
                 }
 
                 if(barrel[j].explosion_state){
