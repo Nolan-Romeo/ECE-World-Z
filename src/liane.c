@@ -45,8 +45,10 @@ int main(int argc, char* argv[]){
     const double l = 10.0;
     const double periode = 2*M_PI*sqrt(l/g); // en s
     const double w0 = 2*M_PI/periode; // en s^-1
-
-	double alpha = 0.1;
+	
+	double lambda = 12;
+	double m = 50; // en kg
+	double alpha = lambda/(2*m);
 	double w = sqrt(pow(w0, 2)-pow(alpha, 2));
 	double A = -(3*M_PI)/4;
 	double B = (alpha*A)/w;
@@ -172,9 +174,9 @@ int main(int argc, char* argv[]){
             //al_draw_line(cameraX, cameraY, x01*zoom+cameraX, y01*zoom+cameraY, al_map_rgb(255, 255, 255), 2);
 			al_draw_scaled_rotated_bitmap(liane, 22, 0, cameraX, cameraY, 2.5, 2.5, -theta, 0);
 			al_draw_tinted_scaled_rotated_bitmap_region(character, 48, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, player_angle, 0);
-            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01*5+cameraX, y01*zoom+cameraY, al_map_rgb(255, 0, 0), 2);
+            /* al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01*5+cameraX, y01*zoom+cameraY, al_map_rgb(255, 0, 0), 2);
             al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+cameraX, y01*zoom-vy01*5+cameraY, al_map_rgb(255, 0, 0), 2);
-            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01*5+cameraX, y01*zoom-vy01*5+cameraY, al_map_rgb(0, 255, 0), 2);
+            al_draw_line(x01*zoom+cameraX, y01*zoom+cameraY, x01*zoom+vx01*5+cameraX, y01*zoom-vy01*5+cameraY, al_map_rgb(0, 255, 0), 2); */
 
             al_draw_textf(font, al_map_rgb(255,255,255), 10, 10, 0, "sense poussée : %d", force_direction);
 			al_draw_textf(font, al_map_rgb(255,255,255), 10, 20, 0, "vitesse : %0.1f", v_theta);
@@ -188,6 +190,7 @@ int main(int argc, char* argv[]){
 
 	al_destroy_bitmap(background);
 	al_destroy_bitmap(character);
+	al_destroy_bitmap(liane);
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
