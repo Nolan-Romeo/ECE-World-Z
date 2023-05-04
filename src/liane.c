@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
 
     bool launched = false;
 
-    double cameraX, cameraY;
+    int cameraX, cameraY;
     double zoom = 45.0;
 
     double theta = 0.0; // en rad
@@ -113,9 +113,9 @@ int main(int argc, char* argv[]){
             if(!launched){ // mouvement d'oscillation sur le pendule
 
                 if(force == 1){
-                    omega += cos(theta)*0.005;
+                    omega += cos(theta)*0.015;
                 }else if(force == -1){
-                    omega -= cos(theta)*0.005;
+                    omega -= cos(theta)*0.015;
                 }
 
 				p_x = sin(theta)*l;
@@ -137,14 +137,14 @@ int main(int argc, char* argv[]){
 				player_angle = 0;
             }
 
-            solve_euler(&theta, &omega, 1.0/fps, m, g, l, k);
+            solve_euler(&theta, &omega, 1.0/fps, m, g, l/15, k);
 
             cameraX = -(p_x*zoom)+1920/2;
             cameraY = -(p_y*zoom)+1080/2;
 
-            al_draw_bitmap(background, cameraX-500, cameraY-300, 0);
-            al_draw_bitmap(background, cameraX-500-3510, cameraY-300, 0);
-            al_draw_bitmap(background, cameraX-500+3510, cameraY-300, 0);
+            al_draw_bitmap(background, (cameraX%3510)-500, cameraY-300, 0);
+            al_draw_bitmap(background, (cameraX%3510)-500+3510, cameraY-300, 0);
+            al_draw_bitmap(background, (cameraX%3510)-500-3510, cameraY-300, 0);
             al_draw_filled_rectangle(0, 0, 1920, cameraY-300, al_map_rgb(30,32,30));
             al_draw_filled_rectangle(0, cameraY-300+1080, 1920, 1080, al_map_rgb(30,32,30));
 
