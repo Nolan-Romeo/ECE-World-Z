@@ -274,4 +274,34 @@ void stopMove(bool keystate[4], Animation animation, int direction){
     }
 }
 
+#define PI 3.14159265
+
+// Définition des constantes du pendule
+const double g = 9.81;
+const double L = 1.0;
+const double m = 1.0;
+
+// Fonction qui retourne la force apériodique f(t)
+double force_ap(double t) {
+    return 0.1 * sin(2 * PI * t);
+}
+
+// Fonction qui calcule la dérivée seconde de omega
+double omega_dd(double omega, double omega_d, double t, double alpha) {
+    double P = m * g;
+    double f = force_ap(t);
+    double f_d = -alpha * omega_d;
+    double sin_omega = sin(omega);
+    return (1.0 / L) * (P * sin_omega - f_d * omega_d - alpha * omega + f);
+}
+
+// Algorithme d'Euler
+void euler(double omega[], double omega_d[], double t[], double alpha, double dt, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        omega[i+1] = omega[i] + omega_d[i] * dt;
+        omega_d[i+1] = omega_d[i] + omega_dd(omega[i], omega_d[i], t[i], alpha) * dt;
+        t[i+1] = t[i] + dt;
+    }
+}
+
 #endif
