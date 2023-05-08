@@ -32,6 +32,7 @@ int main(int argc, char* argv[]){
     ALLEGRO_BITMAP *background = load_image("img/background_liane.bmp");
     ALLEGRO_BITMAP *character = load_image("img/character.bmp");
 	ALLEGRO_BITMAP *liane = load_image("img/liane.bmp");
+	ALLEGRO_BITMAP *panneau = load_image("img/sign.bmp");
 
     bool redraw = true;
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]){
 	double m = 10.0;   // masse du pendule
 	double k = 1.0;   // constante d'amortissement
 
-    double p_x, p_y, v_x, v_y;
+    double p_x = 0, p_y = 0, v_x = 0, v_y = 0;
 
 	int force = 0; // force excitatrice
 
@@ -110,6 +111,8 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(0, 0, 0));
 
+			solve_euler(&theta, &omega, 1.0/fps, m, g, l/15, k);
+
             if(!launched){ // mouvement d'oscillation sur le pendule
 
                 if(force == 1){
@@ -137,16 +140,18 @@ int main(int argc, char* argv[]){
 				player_angle = 0;
             }
 
-            solve_euler(&theta, &omega, 1.0/fps, m, g, l/15, k);
-
             cameraX = -(p_x*zoom)+1920/2;
             cameraY = -(p_y*zoom)+1080/2;
 
-            al_draw_bitmap(background, (cameraX%3510)-500, cameraY-300, 0);
-            al_draw_bitmap(background, (cameraX%3510)-500+3510, cameraY-300, 0);
-            al_draw_bitmap(background, (cameraX%3510)-500-3510, cameraY-300, 0);
-            al_draw_filled_rectangle(0, 0, 1920, cameraY-300, al_map_rgb(30,32,30));
+            al_draw_bitmap(background, (cameraX%3510)-500, cameraY-300-1080*2, 0);
+            al_draw_bitmap(background, (cameraX%3510)-500+3510, cameraY-300-1080*2, 0);
+            al_draw_bitmap(background, (cameraX%3510)-500-3510, cameraY-300-1080*2, 0);
+            al_draw_filled_rectangle(0, 0, 1920, cameraY-300-1080*2, al_map_rgb(30,32,30));
             al_draw_filled_rectangle(0, cameraY-300+1080, 1920, 1080, al_map_rgb(30,32,30));
+			for(int i=zoom*20; i < zoom*20*50; i+=zoom*20){
+				al_draw_scaled_rotated_bitmap(panneau, 20, 0, cameraX+i, cameraY+480, 2, 2, 0, 0);
+				al_draw_textf(font, al_map_rgb(55,46,63), cameraX+i-20, cameraY+480+25, 0, "%d m", i/(int)zoom);
+			}
 
 			al_draw_scaled_rotated_bitmap(liane, 22, 0, cameraX, cameraY, 2.5, 2.5, -theta, 0);
 			al_draw_tinted_scaled_rotated_bitmap_region(character, 48, 0, 24, 24, al_map_rgb(255, 255, 255), 12, 12, 1920/2, 1080/2, 4, 4, player_angle, 0);
