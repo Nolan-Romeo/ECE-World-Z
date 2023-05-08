@@ -152,7 +152,7 @@ int main(int argc, char* argv[])
                             if(z == etage) al_draw_rectangle(x*CASE_SIZE+2, y*CASE_SIZE+2, x*CASE_SIZE+CASE_SIZE+2, y*CASE_SIZE+CASE_SIZE+2, al_get_pixel(map, typeTuileX*TUILE_SIZE_X+TUILE_SIZE_X/2, typeTuileY*TUILE_SIZE_Y+4), 2);
                             al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(typeTuileX*TUILE_SIZE_X), 0+(typeTuileY*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, (((x-z)*(TUILE_SIZE_X))-((y-z)*(TUILE_SIZE_X))-2+MAP_OFFSET_X)*TUILE_RESIZE/2, 0+(((y-z)*8)+((x-z)*8)+MAP_OFFSET_Y-(4*z))*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0);
                         }
-                        if(playerX >= 0 && playerY >= 0 && tab[0][ySel][xSel].type != 0 && tab[1][ySel][xSel].type == 0 && z == 0) al_draw_tinted_scaled_rotated_bitmap_region(map, 144, TUILE_SIZE_Y, TUILE_SIZE_X, 9, al_map_rgb(255,255,255), 0, 0, ((playerX*(TUILE_SIZE_X))-(playerY*(TUILE_SIZE_X))-2+MAP_OFFSET_X)*TUILE_RESIZE/2, 0+((playerY*8)+(playerX*8)+MAP_OFFSET_Y)*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0); // affiche la tuile séléctionnée
+                        if(playerX >= 0 && playerY >= 0 && tab[0][ySel][xSel].type != 0 && tab[1][ySel][xSel].type == 0 && z == 1 && playerX == x && playerY == y) al_draw_tinted_scaled_rotated_bitmap_region(map, 144, TUILE_SIZE_Y*2, TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, ((playerX*(TUILE_SIZE_X))-(playerY*(TUILE_SIZE_X))-2+MAP_OFFSET_X)*TUILE_RESIZE/2+TUILE_SIZE_X, 0+((playerY*8)+(playerX*8)+MAP_OFFSET_Y)*TUILE_RESIZE/2-TUILE_SIZE_Y, TUILE_RESIZE/2, TUILE_RESIZE/2, 0, 0); // affiche la tuile séléctionnée
                     }
                 }
             }
