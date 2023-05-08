@@ -8,9 +8,9 @@ int main()
     assert(al_init());
     al_install_keyboard();
     al_install_mouse();
+
     al_init_primitives_addon();
     al_init_image_addon();
-    al_init_font_addon();
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
@@ -40,9 +40,8 @@ int main()
     ALLEGRO_BITMAP*quitter=load_image("img/QUITTER.png");
 
     ALLEGRO_FONT *font = al_create_builtin_font();
-    ALLEGRO_FONT* panneau = al_load_font("img/Minecraft.ttf", 24, 0);
-    ALLEGRO_MOUSE_CURSOR*curseur = al_create_mouse_cursor(marteau,0,0);
 
+    ALLEGRO_MOUSE_CURSOR*curseur = al_create_mouse_cursor(marteau,0,0);
 
 
     Taupe taupe[5] = { {30, 650, 0},
@@ -65,6 +64,7 @@ int main()
     al_draw_scaled_bitmap(texte_acceuil,0,0,800,160,500,100,900,200,0);
     al_draw_scaled_bitmap(new,0,0,800,167,650,400,600,125,0);
     al_draw_scaled_bitmap(quitter,0,0,550,164,775,580,340,101,0);
+
 
     for(int i=0; i<5; i++){
          al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 0, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, 720, 2, 2, 0, 0);
@@ -89,7 +89,8 @@ int main()
                 }
                         if(x >= 775 && x <= 1125  && y>= 580 && y <= 681){
                             al_destroy_display(fenetre);
-                            al_destroy_event_queue(queue);}
+                            al_destroy_event_queue(queue);
+                            return 0;}
                 }
             }
             if(event.type== ALLEGRO_EVENT_KEY_DOWN && strcmp(al_keycode_to_name(event.keyboard.keycode),"ESCAPE")==0){
@@ -161,9 +162,8 @@ int main()
 
                 al_draw_scaled_bitmap(fond,0,0,1920,1080,0,0,1920,1080,0);
                 //al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 700, ALLEGRO_ALIGN_CENTER, "Mon score : %d", score);
-                al_draw_textf(font, al_map_rgb(255, 255, 255), 1200, 100, ALLEGRO_ALIGN_CENTER, "temps restant : %d", remaining_time);
                 al_draw_scaled_bitmap(ecriture,0,0,800,172,0,0,800,172,0);
-                al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+38*(score), 0, 38, 32, al_map_rgb(255,255,255), 0, 0, 800, 40, 3, 3, 0, 0);
+                al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+50*(score), 0, 24, 50, al_map_rgb(255,255,255), 0, 0, 800, 10, 3, 3, 0, 0);
 
 
                 afficher_taupe(taupe,taupe_img,&frame_visible);          
@@ -173,7 +173,7 @@ int main()
                     al_draw_scaled_bitmap(end,0,0,2289,2154,400,-200,1100,1000,0);
                     //al_draw_textf(panneau, al_map_rgb(255, 255, 255), 100, 500, ALLEGRO_ALIGN_CENTER, "baise ta mère %d",score);
                     al_draw_scaled_bitmap(quitter,0,0,550,164,775,580,340,101,0);
-                    al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 700, ALLEGRO_ALIGN_CENTER, "Bravo ton score est de: %d", score);
+                    al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+50*(score), 0, 24, 50, al_map_rgb(255,255,255), 0, 0, 970, 500, 3, 3, 0, 0);
                     al_wait_for_event(queue, &event);
 
                     if(event.type== ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
@@ -183,7 +183,8 @@ int main()
  
                             if(x >= 775 && x <= 1125  && y>= 580 && y <= 681){
                                 al_destroy_display(fenetre);
-                                al_destroy_event_queue(queue);}
+                                al_destroy_event_queue(queue);
+                                return 0;}
                 }
             }
         }
@@ -203,6 +204,5 @@ int main()
     al_destroy_bitmap(nombre);
     al_destroy_bitmap(ecriture);
     al_destroy_font(font);
-    al_destroy_font(panneau);
 
     }
