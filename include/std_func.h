@@ -132,9 +132,18 @@ void afficherMaze(ALLEGRO_BITMAP *laby_texture, Lilypad lilypad[5], int frame_li
     }
 
     for(int i = 0; i < 5; i ++){
-        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 120, 12, 12, 12, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*lilypad[i].x+LABY_WALL_SIZE*3, Y_PLATEAU+LABY_CASE_SIZE*lilypad[i].y+LABY_WALL_SIZE*3, 1, 1, 0, 0);
-        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 108, 36, 36, 36, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*lilypad[i].x+LABY_WALL_SIZE*2, Y_PLATEAU+LABY_CASE_SIZE*lilypad[i].y+LABY_WALL_SIZE*2, 1, 1, 0, 0);
-        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 108, 72, 36, 36, al_map_rgb(255,255,255), 17.5, 20.5, X_PLATEAU+LABY_CASE_SIZE*lilypad[i].x+LABY_WALL_SIZE*2+17.5, Y_PLATEAU+LABY_CASE_SIZE*lilypad[i].y+LABY_WALL_SIZE*2+20.5, 1, 1, M_PI_4*(int)(frame_lilypad/7.5)/2, 0);
+        current_blue.x = lilypad[i].x*LABY_CASE_SIZE + X_PLATEAU;
+        current_blue.y = lilypad[i].y*LABY_CASE_SIZE + Y_PLATEAU;
+        current_red.x = X_PLATEAU+LABY_CASE_SIZE*(ROWS*2+1)-LABY_WALL_SIZE - lilypad[i].y*LABY_CASE_SIZE;
+        current_red.y = lilypad[i].x*LABY_CASE_SIZE + Y_PLATEAU+LABY_WALL_SIZE;
+
+        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 120, 12, 12, 12, al_map_rgb(255,255,255), 0, 0, current_blue.x+LABY_WALL_SIZE*3, current_blue.y+LABY_WALL_SIZE*3, 1, 1, 0, 0);
+        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 108, 36, 36, 36, al_map_rgb(255,255,255), 0, 0, current_blue.x+LABY_WALL_SIZE*2, current_blue.y+LABY_WALL_SIZE*2, 1, 1, 0, 0);
+        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 108, 72, 36, 36, al_map_rgb(255,255,255), 17.5, 20.5, current_blue.x+LABY_WALL_SIZE*2+17.5, current_blue.y+LABY_WALL_SIZE*2+20.5, 1, 1, M_PI_4*(int)(frame_lilypad/7.5)/2, 0);
+
+        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 120, 12, 12, 12, al_map_rgb(255,255,255), 0, 0, current_red.x+LABY_WALL_SIZE*2, current_red.y+LABY_WALL_SIZE*2, 1, 1, 0, 0);
+        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 108, 36, 36, 36, al_map_rgb(255,255,255), 0, 0, current_red.x+LABY_WALL_SIZE*1, current_red.y+LABY_WALL_SIZE*1, 1, 1, 0, 0);
+        al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 108, 72, 36, 36, al_map_rgb(255,255,255), 17.5, 20.5, current_red.x+LABY_WALL_SIZE*1+17.5, current_red.y+LABY_WALL_SIZE*1+20.5, 1, 1, M_PI_4*(int)(frame_lilypad/7.5)/2, 0);
     }
 
     al_draw_tinted_scaled_rotated_bitmap_region(laby_texture, 0, 120, 96, 72, al_map_rgb(255,255,255), 0, 0, X_PLATEAU+LABY_CASE_SIZE*11-LABY_WALL_SIZE, Y_PLATEAU+LABY_CASE_SIZE*10+LABY_WALL_SIZE*1.6, 1, 1, 0, 0);
