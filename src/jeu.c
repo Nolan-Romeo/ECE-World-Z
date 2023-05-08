@@ -74,130 +74,124 @@ int main()
 
     al_flip_display();
 
-    //ALLEGRO_EVENT_QUEUE* event_queue= al_create_event_queue();
-    //al_register_event_source(event_queue, al_get_keyboard_event_source());
-    bool fin=false;
-    while(!fin){
-        al_wait_for_event(queue, &event);
-        if(event.type== ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-            if(event.mouse.button == 1){
-                int x = event.mouse.x;
-                int y = event.mouse.y;
-                    if (x >= 650 && x <= 1250  && y>= 400 && y <= 525){
-                        fin=true;
-            }
-                    if(x >= 775 && x <= 1125  && y>= 580 && y <= 681){
-                        al_destroy_display(fenetre);
-                        al_destroy_event_queue(queue);}
-            }
-        }
-        if(event.type== ALLEGRO_EVENT_KEY_DOWN && strcmp(al_keycode_to_name(event.keyboard.keycode),"ESCAPE")==0){
-                    al_destroy_display(fenetre);
-                    al_destroy_event_queue(queue);
-        }
-
-    }
-
- 
-
-    while(fin){
-
-        if(!al_is_event_queue_empty(queue)){
-            al_get_next_event(queue, &event);
-            switch (event.type)
-            {
-            case ALLEGRO_EVENT_TIMER:
-                gererTaupes(taupe);
-                redraw = true;
-                break;
-            case ALLEGRO_EVENT_KEY_DOWN:
-                switch (event.keyboard.keycode)
-                {
-                case ALLEGRO_KEY_ESCAPE:
-                    al_destroy_display(fenetre);
-                    al_destroy_event_queue(queue);
-                    return 0;   
-                default:
-                    break;
-                }
-            case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-                if (event.mouse.button == 1) { // Clic gauche
+        //ALLEGRO_EVENT_QUEUE* event_queue= al_create_event_queue();
+        //al_register_event_source(event_queue, al_get_keyboard_event_source());
+    while(1){
+        bool fin=false;
+        while(!fin){
+            al_wait_for_event(queue, &event);
+            if(event.type== ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+                if(event.mouse.button == 1){
                     int x = event.mouse.x;
                     int y = event.mouse.y;
-                    for(int i=0; i <5 ; i++){
-                        if(taupe[i].visible){
-                            if (x >= taupe[i].position_x && x <= taupe[i].position_x+270  && y>= taupe[i].position_y && y <= taupe[i].position_y+250){
-                                taupe[i].visible=0;
-                                score=score+1;
-                            }
-                        }
-                    }
-                    
-                }
-                break;
-
-            default:
-                break;
-            }
-        }
-
-        if(redraw){
-
-            double current_time = al_get_time();
-            int remaining_time = 30 - (int)(current_time);
-
-            if(random == limit_random){
-                limit_random = getRandomInt(600,800);
-                random = 0;
-                random_taupe(taupe);
-            }else{
-                random++;
-            }
-
-
-
-            al_set_mouse_cursor(fenetre,curseur);
-
-            al_draw_scaled_bitmap(fond,0,0,1920,1080,0,0,1920,1080,0);
-            //al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 700, ALLEGRO_ALIGN_CENTER, "Mon score : %d", score);
-            al_draw_textf(font, al_map_rgb(255, 255, 255), 1200, 100, ALLEGRO_ALIGN_CENTER, "temps restant : %d", remaining_time);
-            al_draw_scaled_bitmap(ecriture,0,0,800,172,0,0,800,172,0);
-            al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+38*(score), 0, 38, 32, al_map_rgb(255,255,255), 0, 0, 800, 40, 3, 3, 0, 0);
-
-
-            afficher_taupe(taupe,taupe_img,&frame_visible);          
-
-            if (remaining_time <= 0) {
-                al_draw_bitmap(fond, 0, 0, 0);
-                al_draw_scaled_bitmap(end,0,0,2289,2154,400,-200,1100,1000,0);
-                //al_draw_textf(panneau, al_map_rgb(255, 255, 255), 100, 500, ALLEGRO_ALIGN_CENTER, "baise ta mère %d",score);
-                al_draw_scaled_bitmap(new,0,0,800,167,650,400,600,125,0);
-                al_draw_scaled_bitmap(quitter,0,0,550,164,775,580,340,101,0);
-                al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 700, ALLEGRO_ALIGN_CENTER, "Bravo ton score est de: %d", score);
-                al_wait_for_event(queue, &event);
-
-                if(event.type== ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                    if(event.mouse.button == 1){
-                        int x = event.mouse.x;
-                        int y = event.mouse.y;
                         if (x >= 650 && x <= 1250  && y>= 400 && y <= 525){
-                            fin=false;
-                        }   
+                            fin=true;
+                }
                         if(x >= 775 && x <= 1125  && y>= 580 && y <= 681){
                             al_destroy_display(fenetre);
                             al_destroy_event_queue(queue);}
+                }
             }
-        }
-                if(event.type== ALLEGRO_EVENT_KEY_DOWN && strcmp(al_keycode_to_name(event.keyboard.keycode),"ESCAPE")==0){
-                    al_destroy_display(fenetre);
-                    al_destroy_event_queue(queue);
+            if(event.type== ALLEGRO_EVENT_KEY_DOWN && strcmp(al_keycode_to_name(event.keyboard.keycode),"ESCAPE")==0){
+                        al_destroy_display(fenetre);
+                        al_destroy_event_queue(queue);
+            }
+
         }
 
+    
+
+        while(fin){
+
+            if(!al_is_event_queue_empty(queue)){
+                al_get_next_event(queue, &event);
+                switch (event.type)
+                {
+                case ALLEGRO_EVENT_TIMER:
+                    gererTaupes(taupe);
+                    redraw = true;
+                    break;
+                case ALLEGRO_EVENT_KEY_DOWN:
+                    switch (event.keyboard.keycode)
+                    {
+                    case ALLEGRO_KEY_ESCAPE:
+                        al_destroy_display(fenetre);
+                        al_destroy_event_queue(queue);
+                        return 0;   
+                    default:
+                        break;
+                    }
+                case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+                    if (event.mouse.button == 1) { // Clic gauche
+                        int x = event.mouse.x;
+                        int y = event.mouse.y;
+                        for(int i=0; i <5 ; i++){
+                            if(taupe[i].visible){
+                                if (x >= taupe[i].position_x && x <= taupe[i].position_x+270  && y>= taupe[i].position_y && y <= taupe[i].position_y+250){
+                                    taupe[i].visible=0;
+                                    score=score+1;
+                                }
+                            }
+                        }
+                        
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            if(redraw){
+
+                double current_time = al_get_time();
+                int remaining_time = 30 - (int)(current_time);
+
+                if(random == limit_random){
+                    limit_random = getRandomInt(600,800);
+                    random = 0;
+                    random_taupe(taupe);
+                }else{
+                    random++;
+                }
+
+
+
+                al_set_mouse_cursor(fenetre,curseur);
+
+                al_draw_scaled_bitmap(fond,0,0,1920,1080,0,0,1920,1080,0);
+                //al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 700, ALLEGRO_ALIGN_CENTER, "Mon score : %d", score);
+                al_draw_textf(font, al_map_rgb(255, 255, 255), 1200, 100, ALLEGRO_ALIGN_CENTER, "temps restant : %d", remaining_time);
+                al_draw_scaled_bitmap(ecriture,0,0,800,172,0,0,800,172,0);
+                al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+38*(score), 0, 38, 32, al_map_rgb(255,255,255), 0, 0, 800, 40, 3, 3, 0, 0);
+
+
+                afficher_taupe(taupe,taupe_img,&frame_visible);          
+
+                if (remaining_time <= 0) {
+                    al_draw_bitmap(fond, 0, 0, 0);
+                    al_draw_scaled_bitmap(end,0,0,2289,2154,400,-200,1100,1000,0);
+                    //al_draw_textf(panneau, al_map_rgb(255, 255, 255), 100, 500, ALLEGRO_ALIGN_CENTER, "baise ta mère %d",score);
+                    al_draw_scaled_bitmap(quitter,0,0,550,164,775,580,340,101,0);
+                    al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 700, ALLEGRO_ALIGN_CENTER, "Bravo ton score est de: %d", score);
+                    al_wait_for_event(queue, &event);
+
+                    if(event.type== ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+                        if(event.mouse.button == 1){
+                            int x = event.mouse.x;
+                            int y = event.mouse.y;
+ 
+                            if(x >= 775 && x <= 1125  && y>= 580 && y <= 681){
+                                al_destroy_display(fenetre);
+                                al_destroy_event_queue(queue);}
+                }
+            }
+        }
+
+                }
+                al_flip_display();
+            }
     }
-
-            }
-            al_flip_display();
-        }
 
     al_destroy_bitmap(marteau);
     al_destroy_mouse_cursor(curseur);

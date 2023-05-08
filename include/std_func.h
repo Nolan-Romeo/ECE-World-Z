@@ -77,7 +77,7 @@ void LSCRemoveStart(Maillon** maillon){
 
 void afficher_taupe(Taupe taupe[],ALLEGRO_BITMAP*taupe_img, int *frame){
 
-	*frame=(*frame == 0)?800:*frame-1;
+    *frame=(*frame == 0)?800:*frame-1;
     
 	for(int i=0; i<5; i++){
         if(taupe[i].visible){
