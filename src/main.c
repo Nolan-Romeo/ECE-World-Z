@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
     al_init_primitives_addon();
     al_init_image_addon();
 
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 20.0);
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
     ALLEGRO_DISPLAY* disp = al_create_display(1920, 1080);
     ALLEGRO_FONT* font = al_create_builtin_font();
@@ -99,8 +99,8 @@ int main(int argc, char* argv[])
 
             ALLEGRO_COLOR selection_mask = al_get_pixel(map, 144+(mouse_state.x%grilleSizeX)/4, 0+(mouse_state.y%grilleSizeY)/4);
 
-            int xSelIso = (mouse_state.x-832+6*64)/grilleSizeX*2-12;
-            int ySelIso = (mouse_state.y-256)/grilleSizeY*2;
+            int xSelIso = (mouse_state.x-MAP_OFFSET_X*2+6*64)/grilleSizeX*2-12;
+            int ySelIso = (mouse_state.y-MAP_OFFSET_Y*2)/grilleSizeY*2;
 
             if (selection_mask.r == 1.0f && selection_mask.g == 1.0f){
                 xOffset += 8*TUILE_RESIZE;
@@ -150,9 +150,9 @@ int main(int argc, char* argv[])
                             int typeTuileX = (tab[z][y][x].type-1) % 9;
                             int typeTuileY = (tab[z][y][x].type-1) / 9;
                             if(z == etage) al_draw_rectangle(x*CASE_SIZE+2, y*CASE_SIZE+2, x*CASE_SIZE+CASE_SIZE+2, y*CASE_SIZE+CASE_SIZE+2, al_get_pixel(map, typeTuileX*TUILE_SIZE_X+TUILE_SIZE_X/2, typeTuileY*TUILE_SIZE_Y+4), 2);
-                            al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(typeTuileX*TUILE_SIZE_X), 0+(typeTuileY*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, (((x-z)*(TUILE_SIZE_X))-((y-z)*(TUILE_SIZE_X))-2+416)*TUILE_RESIZE/2, 0+(((y-z)*8)+((x-z)*8)+128-(4*z))*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0);
+                            al_draw_tinted_scaled_rotated_bitmap_region(map, 0+(typeTuileX*TUILE_SIZE_X), 0+(typeTuileY*TUILE_SIZE_Y), TUILE_SIZE_X, TUILE_SIZE_Y, al_map_rgb(255,255,255), 0, 0, (((x-z)*(TUILE_SIZE_X))-((y-z)*(TUILE_SIZE_X))-2+MAP_OFFSET_X)*TUILE_RESIZE/2, 0+(((y-z)*8)+((x-z)*8)+MAP_OFFSET_Y-(4*z))*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0);
                         }
-                        if(playerX >= 0 && playerY >= 0 && tab[0][ySel][xSel].type != 0 && tab[1][ySel][xSel].type == 0 && z == 0) al_draw_tinted_scaled_rotated_bitmap_region(map, 144, TUILE_SIZE_Y, TUILE_SIZE_X, 9, al_map_rgb(255,255,255), 0, 0, ((playerX*(TUILE_SIZE_X))-(playerY*(TUILE_SIZE_X))-2+416)*TUILE_RESIZE/2, 0+((playerY*8)+(playerX*8)+128)*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0); // affiche la tuile séléctionnée
+                        if(playerX >= 0 && playerY >= 0 && tab[0][ySel][xSel].type != 0 && tab[1][ySel][xSel].type == 0 && z == 0) al_draw_tinted_scaled_rotated_bitmap_region(map, 144, TUILE_SIZE_Y, TUILE_SIZE_X, 9, al_map_rgb(255,255,255), 0, 0, ((playerX*(TUILE_SIZE_X))-(playerY*(TUILE_SIZE_X))-2+MAP_OFFSET_X)*TUILE_RESIZE/2, 0+((playerY*8)+(playerX*8)+MAP_OFFSET_Y)*TUILE_RESIZE/2, TUILE_RESIZE, TUILE_RESIZE, 0, 0); // affiche la tuile séléctionnée
                     }
                 }
             }

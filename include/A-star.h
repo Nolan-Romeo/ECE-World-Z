@@ -122,7 +122,7 @@ bool findPath(int x1, int y1, int x2, int y2, Tile map[NB_ETAGE][PLAT_SIZE][PLAT
 
     while(true){
         tileToExpand.Fcoast = 1000;
-		tileToExpand.Hcoast = 1000;
+				tileToExpand.Hcoast = 1000;
         tileToExpand.x = -1;
         tileToExpand.y = -1;
         for(int y = 0; y < PLAT_SIZE; y++){
