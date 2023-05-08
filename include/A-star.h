@@ -103,7 +103,7 @@ bool findPath(int x1, int y1, int x2, int y2, Tile map[NB_ETAGE][PLAT_SIZE][PLAT
 
 	for(int y = 0; y < PLAT_SIZE; y++){
 		for(int x = 0; x < PLAT_SIZE; x++){
-			if(map[1][y][x].type == 0) map2D[y][x].type = 0;
+			if(map[1][y][x].type == 0 && map[0][y][x].type != 0) map2D[y][x].type = 0;
 			else map2D[y][x].type = 3;
 			map2D[y][x].Gcoast = -1;
 			map2D[y][x].Hcoast = -1;
