@@ -76,10 +76,17 @@ void LSCRemoveStart(Maillon** maillon){
 
 
 void afficher_taupe(Taupe taupe[],ALLEGRO_BITMAP*taupe_img, int *frame){
-	*frame=(*frame == 0)?200:*frame-1;
+
+	*frame=(*frame == 0)?800:*frame-1;
+    
 	for(int i=0; i<5; i++){
         if(taupe[i].visible){
-            al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 0+103*(*frame/40), 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);
+            al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 0+103*(*frame/160), 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);
+            if(*frame==0){
+                
+                taupe[i].visible=0;}
+
+    
         }
         else{
             al_draw_tinted_scaled_rotated_bitmap_region(taupe_img, 103*4, 97, 103, 100, al_map_rgb(255,255,255), 0, 0, taupe[i].position_x, taupe[i].position_y, 3, 3, 0, 0);
@@ -98,12 +105,23 @@ void gererTaupes(Taupe taupe[]){
 
 void random_taupe(Taupe taupe[]){
     int i= getRandomInt(0,4);
+    bool x = 0;
+    for (int j = 0 ; j < 5 ; j++){
+        if (taupe[j].visible != 0){
+            x = 1;
+        }
+
+    }
+    if(x == 0){
+        taupe[i].visible = 600;
+    }
+    /*
     for(int j=i; j<i+5; j++){
         if(taupe[j%5].visible==0){
             taupe[i].visible=getRandomInt(400,600);
             break;
         }
-    }
+    }*/
 }
 
 
