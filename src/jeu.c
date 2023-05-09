@@ -38,6 +38,7 @@ int main()
     ALLEGRO_BITMAP*new=load_image("img/new.png");
     ALLEGRO_BITMAP*end=load_image("img/pancarte.png");
     ALLEGRO_BITMAP*quitter=load_image("img/QUITTER.png");
+    ALLEGRO_BITMAP*scorefin=load_image("img/scorefinal.png");
 
     ALLEGRO_FONT *font = al_create_builtin_font();
 
@@ -171,9 +172,11 @@ int main()
                 if (remaining_time <= 0) {
                     al_draw_bitmap(fond, 0, 0, 0);
                     al_draw_scaled_bitmap(end,0,0,2289,2154,400,-200,1100,1000,0);
-                    //al_draw_textf(panneau, al_map_rgb(255, 255, 255), 100, 500, ALLEGRO_ALIGN_CENTER, "baise ta mère %d",score);
-                    al_draw_scaled_bitmap(quitter,0,0,550,164,775,580,340,101,0);
-                    al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+50*(score), 0, 24, 50, al_map_rgb(255,255,255), 0, 0, 970, 500, 3, 3, 0, 0);
+    
+                    al_draw_scaled_bitmap(quitter,0,0,550,164,745,680,340,101,0);
+                    al_draw_scaled_bitmap(scorefin,0,0,761,180,610,400,600,141,0);
+
+                    al_draw_tinted_scaled_rotated_bitmap_region(nombre, 0+50*(score), 0, 24, 50, al_map_rgb(255,255,255), 0, 0, 920, 500, 3, 3, 0, 0);
                     al_wait_for_event(queue, &event);
 
                     if(event.type== ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
@@ -181,7 +184,7 @@ int main()
                             int x = event.mouse.x;
                             int y = event.mouse.y;
  
-                            if(x >= 775 && x <= 1125  && y>= 580 && y <= 681){
+                            if(x >= 775 && x <= 1125  && y>= 680 && y <= 781){
                                 al_destroy_display(fenetre);
                                 al_destroy_event_queue(queue);
                                 return 0;}
