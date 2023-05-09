@@ -26,6 +26,8 @@ int main(int argc, char* argv[]){
     ALLEGRO_BITMAP *chain = load_image("img/chain.bmp");
     ALLEGRO_BITMAP *liane = load_image("img/liane.bmp");
     ALLEGRO_BITMAP *perso = load_image("img/character.bmp");
+    ALLEGRO_BITMAP *button = load_image("img/button1.bmp");
+    ALLEGRO_BITMAP *button_pressed = load_image("img/button1_pressed.bmp");
 
     ALLEGRO_EVENT event;
 
@@ -40,10 +42,13 @@ int main(int argc, char* argv[]){
     double camera = 0;
 
     bool start = false;
-    bool intro = false;
+    int intro = 0;
 
     Barrel barrel[2] = { [0 ... 1] = {48, false, false, 0, 0}};
 
+    ALLEGRO_COLOR tinted = al_map_rgb(100,100,100);
+
+    ALLEGRO_MOUSE_STATE mouse_pos;
 
     clock_t begin = clock();
     clock_t end;
@@ -71,6 +76,14 @@ int main(int argc, char* argv[]){
                 case ALLEGRO_EVENT_TIMER:
                     redraw = true;
                     break;
+                case ALLEGRO_EVENT_MOUSE_AXES:
+                    al_get_mouse_state(&mouse_pos);
+                    break; 
+                case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+                    if((intro != 0 || intro!= 2 )&& mouse_pos.x >= 790 && mouse_pos.x <= 1150 && mouse_pos.y >= 486 && mouse_pos.y <= 594 ){
+                        intro = 1;
+                    }
+                    break;    
                 case ALLEGRO_EVENT_KEY_DOWN:
                     switch (event.keyboard.keycode){
                         case ALLEGRO_KEY_ESCAPE:
@@ -78,12 +91,10 @@ int main(int argc, char* argv[]){
                             al_destroy_event_queue(queue);
                             return 0; 
                         case ALLEGRO_KEY_SPACE:
-                            if( intro == false  && start == false){
+                            if( intro == 2  && start == false){
                                 begin = clock();
                                 start = true;
                             }
-                        case ALLEGRO_KEY_S:
-                            intro = true;
                             break;
                         case ALLEGRO_KEY_J:
                             if( (400-(frame_bg*10/3)+camera) >= 400) barrel[1].stop = true;
@@ -109,12 +120,14 @@ int main(int argc, char* argv[]){
 
             al_clear_to_color(al_map_rgb(255, 255, 255));
 
-            if(intro){
-                frame_bg = (frame_bg==120)?120 : frame_bg+1;   
-                if(frame_bg == 120 )intro = false;   
+            if(intro == 1){
+                frame_bg = (frame_bg==120)?120 : frame_bg+1;  
+                tinted = al_map_rgb(255,255,255);
+                if(frame_bg == 120 )intro = 2;   
             }
+
             int bg_y = 400-(frame_bg*10/3)+camera;
-            al_draw_bitmap_region(background,0,bg_y,1920,1080,0,0,0);
+            al_draw_tinted_bitmap_region(background,tinted,0,bg_y,1920,1080,0,0,0);
 
             for(int j=0 ; j<2 ; j++){
                 if(barrel[j].explosion_state){
@@ -131,15 +144,12 @@ int main(int argc, char* argv[]){
                         al_draw_bitmap(chain,860+160*j,(barrel[j].pos-32*i)-400,0);
                     }                    
                     al_draw_bitmap(barrel_img,816+160*j, (barrel[j].pos+64)-400,0);
-                    //printf("%f | ",(barrel[0].pos+64)-400);
                 }
                 else{
                     for (int i = -2; i < barrel[j].chain_count+3; i++){
                         al_draw_bitmap(chain,860+160*j,-400+(frame_bg*10/3)-32*i,0);
-                        //printf("%d | ",-400+(frame_bg*10/3)-32*(-2));
                     }                    
                     al_draw_bitmap(barrel_img,816+160*j,-400+(frame_bg*10/3)+96,0); 
-                    //printf("%d | ",(-400+(frame_bg*10/3)+96));
                 }
 
             }
@@ -148,13 +158,16 @@ int main(int argc, char* argv[]){
             al_draw_bitmap(liane,830+128+32,-400+(frame_bg*10/3)-camera,ALLEGRO_FLIP_HORIZONTAL);
             for (int i = 0; i < 2; i++)
             {
-                al_draw_tinted_scaled_rotated_bitmap_region(perso,0,0,24,24,al_map_rgb(255,255,255),0, 0,800+160*i,740+(frame_bg*10/3)-camera,7,7,0,0);
+                al_draw_tinted_scaled_rotated_bitmap_region(perso,0,0,24,24,tinted,0, 0,800+160*i,735+(frame_bg*10/3)-camera,7,7,0,0);
             }
             
-            //printf("%f | ",-400+(frame_bg*10/3)-camera);
-
-            //al_draw_line(960,0,960,1080,al_map_rgb(0,255, 0),1);
-            //al_draw_line(0,1080/2,1920,1080/2,al_map_rgb(0,255, 0),1);
+            if( intro == 0 ){
+                if(mouse_pos.x >= 790 && mouse_pos.x <= 1150 && mouse_pos.y >= 486 && mouse_pos.y <= 594){
+                    al_draw_tinted_scaled_rotated_bitmap_region(button_pressed,0,0,90,27,al_map_rgb(255,255,255),0,0,790,486,4,4,0,0);
+                }else{
+                    al_draw_tinted_scaled_rotated_bitmap_region(button,0,0,90,27,al_map_rgb(255,255,255),0,0,790,486,4,4,0,0);
+                }
+            }
 
             al_flip_display();
 
