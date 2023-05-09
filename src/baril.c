@@ -25,6 +25,7 @@ int main(int argc, char* argv[]){
     ALLEGRO_BITMAP *background = load_image("img/background.bmp");
     ALLEGRO_BITMAP *chain = load_image("img/chain.bmp");
     ALLEGRO_BITMAP *liane = load_image("img/liane.bmp");
+    ALLEGRO_BITMAP *perso = load_image("img/character.bmp");
 
     ALLEGRO_EVENT event;
 
@@ -116,6 +117,15 @@ int main(int argc, char* argv[]){
             al_draw_bitmap_region(background,0,bg_y,1920,1080,0,0,0);
 
             for(int j=0 ; j<2 ; j++){
+                if(barrel[j].explosion_state){
+                    if(barrel[j].frame_explosion<40){
+                        barrel[j].frame_explosion++;
+                    }else{
+                        barrel[j].explosion_state = false;
+                    }
+                    al_draw_tinted_scaled_rotated_bitmap_region(explosion, 0+(barrel[j].frame_explosion/5)*64, 0, 64, 64, al_map_rgb(255,255,255), 0, 0, 786+160*j, 570, 3, 3, 0, 0);   
+                }
+
                 if( bg_y == 400 ){
                     for (int i = -1; i < barrel[j].chain_count+3; i++){
                         al_draw_bitmap(chain,860+160*j,(barrel[j].pos-32*i)-400,0);
@@ -132,18 +142,15 @@ int main(int argc, char* argv[]){
                     //printf("%d | ",(-400+(frame_bg*10/3)+96));
                 }
 
-                if(barrel[j].explosion_state){
-                    if(barrel[j].frame_explosion<40){
-                        barrel[j].frame_explosion++;
-                    }else{
-                        barrel[j].explosion_state = false;
-                    }
-                    al_draw_tinted_scaled_rotated_bitmap_region(explosion, 0+(barrel[j].frame_explosion/5)*64, 0, 64, 64, al_map_rgb(255,255,255), 0, 0, 816+160*j, 570+64, 2, 2, 0, 0);   
-                }
             }
             
             al_draw_bitmap(liane,830,-400+(frame_bg*10/3)-camera,0);
             al_draw_bitmap(liane,830+128+32,-400+(frame_bg*10/3)-camera,ALLEGRO_FLIP_HORIZONTAL);
+            for (int i = 0; i < 2; i++)
+            {
+                al_draw_tinted_scaled_rotated_bitmap_region(perso,0,0,24,24,al_map_rgb(255,255,255),0, 0,800+160*i,740+(frame_bg*10/3)-camera,7,7,0,0);
+            }
+            
             //printf("%f | ",-400+(frame_bg*10/3)-camera);
 
             //al_draw_line(960,0,960,1080,al_map_rgb(0,255, 0),1);
