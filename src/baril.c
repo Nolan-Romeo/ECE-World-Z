@@ -158,7 +158,7 @@ int main(int argc, char* argv[]){
             al_draw_bitmap(liane,830+128+32,-400+(frame_bg*10/3)-camera,ALLEGRO_FLIP_HORIZONTAL);
             for (int i = 0; i < 2; i++)
             {
-                al_draw_tinted_scaled_rotated_bitmap_region(perso,0,0,24,24,tinted,0, 0,800+160*i,735+(frame_bg*10/3)-camera,7,7,0,0);
+                al_draw_tinted_scaled_rotated_bitmap_region(perso,0,0,24,24,al_map_rgb(255,255,255),0, 0,800+160*i,735+(frame_bg*10/3)-camera,7,7,0,0);
             }
             
             if( intro == 0 ){
